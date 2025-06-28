@@ -10,3 +10,13 @@ body { font-family: 'Poppins', sans-serif; background-color: #0a0a1a; color: #e0
 .scroll-animate { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
 .scroll-animate.is-visible { opacity: 1; transform: translateY(0); }
 #signup-modal.hidden { display: none; }
+
+/* Logo Glow Effect */
+.logo-glow {
+  filter: drop-shadow(0 0 6px rgba(0, 191, 255, 0.5));
+  transition: filter 0.3s ease-in-out;
+}
+
+.logo-glow:hover {
+  filter: drop-shadow(0 0 12px rgba(0, 191, 255, 0.8));
+}
