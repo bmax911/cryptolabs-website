@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "clean": "rm -rf dist",
+    "copy-html": "cp -r templates/* dist/",
+    "copy-static": "cp -r static dist/",
+    "build": "npm run clean && mkdir dist && npm run copy-html && npm run copy-static"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "netlify-cli": "^22.2.1",
     "node-fetch": "^2.7.0"
   }
 }

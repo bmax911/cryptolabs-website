@@ -1,5 +1,10 @@
+# This is the "Build Context" for your site.
 [build]
-  publish = "/"
-
-[functions]
-  directory = "netlify/functions"
+  # Command to run: This tells Netlify to run our new build script.
+  command = "npm run build"
+  
+  # Publish directory: This tells Netlify to deploy the final "dist" folder.
+  publish = "dist/"
+  
+  # Functions directory: This remains the same.
+  functions = "netlify/functions"
