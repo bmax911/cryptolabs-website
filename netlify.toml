@@ -1,13 +1,5 @@
-# This section is for the LIVE deployment on Netlify's servers.
-# It tells Netlify that your final website is in the root directory.
 [build]
   publish = "/"
 
-# This section is for your LOCAL `netlify dev` server.
-# It also tells the local server that your website is in the root directory.
-[dev]
-  publish = "/"
-
-# This section remains the same.
 [functions]
   directory = "netlify/functions"
