@@ -37,7 +37,8 @@ exports.handler = async function (event) {
     // --- The Core Logic: Define what is a "good" email ---
     // We will accept 'safe' (verified) and 'catch-all' (valid domain, common for businesses).
     // We will REJECT 'risky' (disposable/temp email) and 'unsafe' (invalid/bounced).
-    const isGoodEmail = data.status === 'safe' || data.status === 'catch-all';
+    // We will also REJECT free email providers (e.g., gmail.com, yahoo.com).
+    const isGoodEmail = (data.status === 'safe' || data.status === 'catch-all') && !data.is_disposable && !data.is_free;
 
     // --- Send a clean, simple response back to our frontend ---
     return {

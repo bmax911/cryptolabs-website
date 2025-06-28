@@ -74,4 +74,22 @@ document.addEventListener('DOMContentLoaded', function() {
         animatedElements.forEach(el => observer.observe(el));
     }
 
+    // --- COOKIE CONSENT LOGIC ---
+    const cookieConsent = document.getElementById('cookie-consent');
+    const acceptCookies = document.getElementById('accept-cookies');
+    const declineCookies = document.getElementById('decline-cookies');
+
+    // Check if consent was already given
+    if (!localStorage.getItem('cookie_consent')) {
+        cookieConsent.classList.remove('hidden');
+    }
+
+    acceptCookies.addEventListener('click', () => {
+        localStorage.setItem('cookie_consent', 'true');
+        cookieConsent.classList.add('hidden');
+    });
+
+    declineCookies.addEventListener('click', () => {
+        cookieConsent.classList.add('hidden');
+    });
 });
