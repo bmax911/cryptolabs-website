@@ -1,24 +1,25 @@
 const fetch = require('node-fetch');
 
 exports.handler = async function (event) {
-  // Only allow POST requests
+  // We only want to accept POST requests from our form
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   }
 
   try {
     const { email } = JSON.parse(event.body);
-    const API_KEY = process.env.REOON_API_KEY; // Securely access the API key
+    const API_KEY = process.env.REOON_API_KEY; // Securely gets your key from Netlify's settings
 
+    // --- Server-side validation ---
     if (!API_KEY) {
-      throw new Error('API Key not configured.');
+      console.error('Reoon API Key is not configured on the server.');
+      return { statusCode: 500, body: JSON.stringify({ error: 'Server configuration error.' }) };
+    }
+    if (!email || !email.includes('@')) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'A valid email is required.' }) };
     }
 
-    if (!email) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'Email is required.' }) };
-    }
-
-    // Call the Reoon API
+    // --- Call the Reoon API ---
     const reoonResponse = await fetch(`https://api.reoon.com/api/v1/email-verify/${email}`, {
       method: 'GET',
       headers: {
@@ -27,30 +28,30 @@ exports.handler = async function (event) {
     });
 
     if (!reoonResponse.ok) {
-        throw new Error(`Reoon API responded with status: ${reoonResponse.status}`);
+        console.error(`Reoon API responded with status: ${reoonResponse.status}`);
+        return { statusCode: 502, body: JSON.stringify({ error: 'Could not connect to verification service.' }) };
     }
 
     const data = await reoonResponse.json();
 
-    // Analyze the response from Reoon
-    // We consider 'safe' and 'catch-all' as acceptable for a waitlist.
-    // We reject 'risky' and 'unsafe'.
-    const isSafe = data.status === 'safe' || data.status === 'catch-all';
+    // --- The Core Logic: Define what is a "good" email ---
+    // We will accept 'safe' (verified) and 'catch-all' (valid domain, common for businesses).
+    // We will REJECT 'risky' (disposable/temp email) and 'unsafe' (invalid/bounced).
+    const isGoodEmail = data.status === 'safe' || data.status === 'catch-all';
 
-    // Send a simple response back to our frontend
+    // --- Send a clean, simple response back to our frontend ---
     return {
       statusCode: 200,
       body: JSON.stringify({ 
-        is_safe: isSafe,
-        status: data.status,
-        message: isSafe ? 'Email is valid.' : 'This email address is not accepted.' 
+        is_safe: isGoodEmail,
+        message: isGoodEmail ? 'Success! You have been added to the waitlist.' : 'This email address is not accepted. Please use a valid work email.' 
       }),
     };
   } catch (error) {
-    console.error('Verification Error:', error);
+    console.error('Verification Function Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Internal Server Error. Could not verify email.' }),
+      body: JSON.stringify({ error: 'An unexpected server error occurred.' }),
     };
   }
 };
