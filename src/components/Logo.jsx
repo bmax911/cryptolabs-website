@@ -1,7 +1,7 @@
 const Logo = ({ className = '' }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 170 50" // Adjusted viewBox for the new composition
+    viewBox="0 0 195 50" // Adjusted viewBox for the new composition
     className={`h-10 w-auto text-gray-800 dark:text-white ${className}`}
     aria-label="CryptoLabs Logo"
   >
