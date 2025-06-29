@@ -1,18 +1,16 @@
-import { resolve } from 'path'
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  root: 'templates',
+  plugins: [react()],
   build: {
-    outDir: '../dist',
-    emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'templates/index.html'),
-        pricing: resolve(__dirname, 'templates/pricing.html'),
-        signup: resolve(__dirname, 'templates/signup.html')
+        main: 'index.html',
+        pricing: 'pricing.html',
+        signup: 'signup.html'
       }
     }
-  },
-  publicDir: '../static'
+  }
 })
