@@ -90,6 +90,32 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* CONTACT FORM SECTION */}
+      <section id="contact" className="py-20 md:py-24 bg-gray-900/50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">Contact Us</h2>
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto text-center mb-12">Have questions? We'd love to hear from you.</p>
+          <form name="contact" method="POST" data-netlify="true" className="max-w-xl mx-auto">
+            <input type="hidden" name="form-name" value="contact" />
+            <div className="mb-4">
+              <label htmlFor="name" className="sr-only">Your Name</label>
+              <input type="text" name="name" id="name" placeholder="Your Name" required className="w-full bg-gray-800 border border-gray-600 rounded-md py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="email" className="sr-only">Your Email</label>
+              <input type="email" name="email" id="email" placeholder="Your Email" required className="w-full bg-gray-800 border border-gray-600 rounded-md py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+            </div>
+            <div className="mb-6">
+              <label htmlFor="message" className="sr-only">Message</label>
+              <textarea name="message" id="message" rows="4" placeholder="Your Message" required className="w-full bg-gray-800 border border-gray-600 rounded-md py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
+            </div>
+            <div className="text-center">
+              <button type="submit" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-10 rounded-full transition-all duration-300 transform hover:scale-105">Send Message</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
