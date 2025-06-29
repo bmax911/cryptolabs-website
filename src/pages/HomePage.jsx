@@ -1,8 +1,30 @@
+import { useRef, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Typewriter from 'typewriter-effect';
 
 const HomePage = () => {
+  const featuresRef = useRef(null);
+
+  useEffect(() => {
+    const featuresSection = featuresRef.current;
+    if (!featuresSection) return;
+
+    const handleMouseMove = (e) => {
+      const rect = featuresSection.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      featuresSection.style.setProperty('--mouse-x', `${x}px`);
+      featuresSection.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    featuresSection.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      featuresSection.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   return (
     <div className="antialiased">
       <Header />
@@ -28,7 +50,7 @@ const HomePage = () => {
       </section>
 
       {/* FEATURES SECTION */}
-      <section id="features" className="py-20 md:py-32 bg-[#0a0a1a]">
+      <section id="features" ref={featuresRef} className="py-20 md:py-32 bg-[#0a0a1a] features-motion-bg">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white scroll-animate">A Single Platform for Peak Performance</h2>
           <div id="features-grid" className="grid grid-cols-1 md:grid-cols-3 gap-8">
