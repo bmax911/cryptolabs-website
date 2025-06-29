@@ -39,19 +39,12 @@ const SignupPage = () => {
     setStatus('sending');
     setMessage('');
 
-    if (typeof grecaptcha === 'undefined' || typeof grecaptcha.enterprise === 'undefined') {
-        setStatus('error');
-        setMessage('reCAPTCHA not loaded. Please check your connection or ad-blocker.');
-        return;
-    }
-
     try {
-        const token = await grecaptcha.enterprise.execute('6LeSc3ErAAAAAOykTA8AJ4g-pFzD-gLQplTtd0oe', { action: 'SIGNUP' });
-        
         const functions = getFunctions();
         const verifyEmail = httpsCallable(functions, 'verifyEmail');
         
-        const result = await verifyEmail({ email, 'g-recaptcha-response': token });
+        // Call verifyEmail with just the email, no reCAPTCHA token
+        const result = await verifyEmail({ email });
 
         if (result.data.is_safe) {
             setStatus('success');
@@ -63,7 +56,8 @@ const SignupPage = () => {
         }
     } catch (error) {
         setStatus('error');
-        setMessage('Could not connect to the service. Please check your connection and try again.');
+        const errorMessage = error.message || 'Could not connect to the service. Please check your connection and try again.';
+        setMessage(errorMessage);
         console.error('Submission Error:', error);
     }
   };

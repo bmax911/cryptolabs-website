@@ -12,6 +12,12 @@ const PricingPage = () => {
     USDT: { basic: 30, pro: 100, enterprise: 250 },
   };
 
+  const currencySymbols = {
+    USD: '$',
+    EUR: '€',
+    USDT: '₮',
+  };
+
   return (
     <div className="antialiased">
       <Header />
@@ -37,7 +43,7 @@ const PricingPage = () => {
             <div className="feature-card p-8 rounded-xl flex flex-col">
               <h2 className="text-2xl font-bold text-white mb-2">Basic</h2>
               <p className="text-gray-400 mb-6">For individuals and hobbyists</p>
-              <div className="text-4xl font-bold text-white mb-6">${prices[currency].basic}<span className="text-lg font-normal text-gray-400">/mo</span></div>
+              <div className="text-4xl font-bold text-white mb-6">{currencySymbols[currency]}{prices[currency].basic}<span className="text-lg font-normal text-gray-400">/mo</span></div>
               <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Trading Fee Cashback</li>
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Basic AI Analysis</li>
@@ -51,7 +57,7 @@ const PricingPage = () => {
               <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-cyan-500 text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
               <h2 className="text-2xl font-bold text-white mb-2">Pro</h2>
               <p className="text-gray-400 mb-6">For serious traders and professionals</p>
-              <div className="text-4xl font-bold text-white mb-6">${prices[currency].pro}<span className="text-lg font-normal text-gray-400">/mo</span></div>
+              <div className="text-4xl font-bold text-white mb-6">{currencySymbols[currency]}{prices[currency].pro}<span className="text-lg font-normal text-gray-400">/mo</span></div>
               <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Everything in Basic</li>
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Advanced AI Analysis &amp; Signals</li>
@@ -64,7 +70,7 @@ const PricingPage = () => {
             <div className="feature-card p-8 rounded-xl flex flex-col">
               <h2 className="text-2xl font-bold text-white mb-2">Enterprise</h2>
               <p className="text-gray-400 mb-6">For teams and institutions</p>
-              <div className="text-4xl font-bold text-white mb-6">${prices[currency].enterprise}<span className="text-lg font-normal text-gray-400">/mo</span></div>
+              <div className="text-4xl font-bold text-white mb-6">{currencySymbols[currency]}{prices[currency].enterprise}<span className="text-lg font-normal text-gray-400">/mo</span></div>
               <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Everything in Pro</li>
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Team Accounts &amp; Management</li>
