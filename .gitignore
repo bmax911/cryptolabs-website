@@ -3,4 +3,9 @@
 # Local Netlify folder
 .netlify
 /dist
-/src/firebaseConfig.js
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env*.local
