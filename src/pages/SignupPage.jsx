@@ -46,7 +46,7 @@ const SignupPage = () => {
     }
 
     try {
-        const token = await grecaptcha.enterprise.execute('6LeEc3ErAAAAAC2Wux7iibC2yHU3EyXbIME9KSy0', { action: 'SIGNUP' });
+        const token = await grecaptcha.enterprise.execute('6LeSc3ErAAAAAOykTA8AJ4g-pFzD-gLQplTtd0oe', { action: 'SIGNUP' });
         
         const functions = getFunctions();
         const verifyEmail = httpsCallable(functions, 'verifyEmail');
