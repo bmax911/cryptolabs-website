@@ -10,9 +10,10 @@ const Header = () => {
         </Link>
         <div className="hidden md:flex items-center space-x-8">
           <Link to="/" className="text-gray-300 hover:text-cyan-400 transition-colors">Home</Link>
-          <Link to="/#features" className="text-gray-300 hover:text-cyan-400 transition-colors">Features</Link>
+          <a href="/#features" className="text-gray-300 hover:text-cyan-400 transition-colors">Features</a>
           <Link to="/pricing" className="text-gray-300 hover:text-cyan-400 transition-colors">Pricing</Link>
-          <Link to="/signup" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-5 rounded-full transition-all duration-300">Get Access</Link>
+          <Link to="/auth" className="text-gray-300 hover:text-cyan-400 transition-colors">Login</Link>
+          <Link to="/signup" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-5 rounded-full transition-all duration-300">Sign Up</Link>
         </div>
         <button id="menu-btn" className="md:hidden focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
@@ -20,9 +21,10 @@ const Header = () => {
       </nav>
       <div id="menu" className="hidden md:hidden">
         <Link to="/" className="block py-2 px-6 text-sm text-gray-300 hover:bg-gray-800">Home</Link>
-        <Link to="/#features" className="block py-2 px-6 text-sm text-gray-300 hover:bg-gray-800">Features</Link>
+        <a href="/#features" className="block py-2 px-6 text-sm text-gray-300 hover:bg-gray-800">Features</a>
         <Link to="/pricing" className="block py-2 px-6 text-sm text-gray-300 hover:bg-gray-800">Pricing</Link>
-        <Link to="/signup" className="block py-2 px-6 text-sm text-gray-300 hover:bg-gray-800">Get Early Access</Link>
+        <Link to="/auth" className="block py-2 px-6 text-sm text-gray-300 hover:bg-gray-800">Login</Link>
+        <Link to="/signup" className="block py-2 px-6 text-sm text-gray-300 hover:bg-gray-800">Sign Up</Link>
       </div>
     </header>
   );

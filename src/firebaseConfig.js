@@ -1,18 +1,21 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// TODO: Add your own Firebase configuration from your Firebase project
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyALcGitAfedXABIau5FiKpz5-0qUWhfMw4",
-  authDomain: "cryptolabsapp-100b4.firebaseapp.com",
-  projectId: "cryptolabsapp-100b4",
-  storageBucket: "cryptolabsapp-100b4.firebasestorage.app",
-  messagingSenderId: "311556917035",
-  appId: "1:311556917035:web:d9ae0224c01a4e26fae76e",
-  measurementId: "G-DS52QMQHZD"
+  apiKey: "AIzaSyArkIqz499Wjr1qRsr1GnA1Ggw0jy-H_fs",
+  authDomain: "cryptolabs-webapp.firebaseapp.com",
+  projectId: "cryptolabs-webapp",
+  storageBucket: "cryptolabs-webapp.firebasestorage.app",
+  messagingSenderId: "830837351021",
+  appId: "1:830837351021:web:b50c3574d7785e03ad5564",
+  measurementId: "G-EZ25XYRVVS"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+const analytics = getAnalytics(app);

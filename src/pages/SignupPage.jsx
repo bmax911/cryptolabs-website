@@ -1,6 +1,7 @@
 import Header from '../components/Header';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
@@ -19,27 +20,20 @@ const SignupPage = () => {
     }
 
     try {
-        const token = await grecaptcha.enterprise.execute('6Le9ZHErAAAAAHAxdgOhoGOq_sAAkLytmkwo9-Om', { action: 'SIGNUP' });
+        const token = await grecaptcha.enterprise.execute('6LeEc3ErAAAAAC2Wux7iibC2yHU3EyXbIME9KSy0', { action: 'SIGNUP' });
+        
+        const functions = getFunctions();
+        const verifyEmail = httpsCallable(functions, 'verifyEmail');
+        
+        const result = await verifyEmail({ email, 'g-recaptcha-response': token });
 
-        const response = await fetch('/.netlify/functions/verify-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, 'g-recaptcha-response': token }),
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.error || 'A server error occurred.');
-        }
-
-        if (result.is_safe) {
+        if (result.data.is_safe) {
             setStatus('success');
-            setMessage(result.message);
+            setMessage(result.data.message);
             setEmail('');
         } else {
             setStatus('error');
-            setMessage(result.message);
+            setMessage(result.data.message);
         }
     } catch (error) {
         setStatus('error');
