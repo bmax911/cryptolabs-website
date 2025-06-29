@@ -1,5 +1,6 @@
 import Header from '../components/Header';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
@@ -78,7 +79,7 @@ const SignupPage = () => {
             {status === 'success' && <p className="mt-4 text-sm text-green-400 text-center">{message}</p>}
           </div>
           <p className="text-center text-gray-500 text-sm mt-6">
-            <a href="/" className="hover:text-gray-300 transition-colors">← Back to Home</a>
+            <Link to="/" className="hover:text-gray-300 transition-colors">← Back to Home</Link>
           </p>
         </div>
       </main>

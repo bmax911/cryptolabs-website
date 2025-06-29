@@ -1,17 +1,19 @@
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return (
     <footer className="bg-gray-900/50 border-t border-gray-800/50 pt-16 pb-8">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center md:text-left">
           <div className="md:col-span-1 flex flex-col items-center md:items-start">
-            <a href="#hero" className="flex items-center mb-2" aria-label="CryptoLabs Home">
+            <Link to="/" className="flex items-center mb-2" aria-label="CryptoLabs Home">
               <img src="/logo.svg" alt="CryptoLabs Logo" className="h-8 w-auto logo-glow" />
               <span className="ml-3 text-xl font-bold text-white">CryptoLabs</span>
-            </a>
+            </Link>
             <p className="text-gray-400 text-sm">Empowering traders with AI-driven tools for a smarter financial future.</p>
           </div>
           <div><h4 className="font-bold text-white mb-4">Quick Links</h4><ul className="space-y-2"><li><a href="#hero" className="text-gray-400 hover:text-cyan-400 transition-colors">Home</a></li><li><a href="#features" className="text-gray-400 hover:text-cyan-400 transition-colors">Features</a></li><li><a href="#cta" className="text-gray-400 hover:text-cyan-400 transition-colors">Contact</a></li></ul></div>
-          <div><h4 className="font-bold text-white mb-4">Legal & Info</h4><ul className="space-y-2"><li><a href="/privacy-policy.html" target="_blank" className="text-gray-400 hover:text-cyan-400 transition-colors">Privacy Policy</a></li><li><a href="/terms-of-use.html" target="_blank" className="text-gray-400 hover:text-cyan-400 transition-colors">Terms of Use</a></li><li><a href="/cookie-policy.html" target="_blank" className="text-gray-400 hover:text-cyan-400 transition-colors">Cookie Policy</a></li><li><a href="/disclaimer.html" target="_blank" className="text-gray-400 hover:text-cyan-400 transition-colors">Disclaimer</a></li></ul></div>
+          <div><h4 className="font-bold text-white mb-4">Legal & Info</h4><ul className="space-y-2"><li><Link to="/privacy-policy" className="text-gray-400 hover:text-cyan-400 transition-colors">Privacy Policy</Link></li><li><Link to="/terms-of-use" className="text-gray-400 hover:text-cyan-400 transition-colors">Terms of Use</Link></li><li><Link to="/cookie-policy" className="text-gray-400 hover:text-cyan-400 transition-colors">Cookie Policy</Link></li><li><Link to="/disclaimer" className="text-gray-400 hover:text-cyan-400 transition-colors">Disclaimer</Link></li></ul></div>
           <div>
             <h4 className="font-bold text-white mb-4">Connect With Us</h4>
             <div className="flex space-x-4 justify-center md:justify-start">
