@@ -5,11 +5,37 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [status, setStatus] = useState('idle'); // idle, sending, success, error
   const [message, setMessage] = useState('');
 
+  const validateEmail = (emailToValidate) => {
+    if (!emailToValidate) {
+      setEmailError('Email address is required.');
+      return false;
+    }
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(emailToValidate)) {
+      setEmailError('Please enter a valid email address.');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    validateEmail(newEmail);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateEmail(email)) {
+      return;
+    }
+
     setStatus('sending');
     setMessage('');
 
@@ -63,10 +89,11 @@ const SignupPage = () => {
                   required 
                   className="w-full bg-gray-800 border border-gray-600 rounded-md py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                   disabled={status === 'sending' || status === 'success'}
                 />
               </div>
+              {emailError && <p className="mt-2 text-sm text-red-500 text-center">{emailError}</p>}
               <button 
                 type="submit" 
                 className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-5 rounded-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
