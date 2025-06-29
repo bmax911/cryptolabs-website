@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import PricingPage from './pages/PricingPage';
 import SignupPage from './pages/SignupPage';
+import CookieConsentBanner from './components/CookieConsentBanner';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/signup" element={<SignupPage />} />
       </Routes>
+      <CookieConsentBanner />
     </Router>
   );
 }
