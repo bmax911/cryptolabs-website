@@ -1,5 +1,6 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Typewriter from 'typewriter-effect';
@@ -25,6 +26,27 @@ const HomePage = () => {
       featuresSection.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+
+  const form = useRef();
+  const [formStatus, setFormStatus] = useState('idle'); // idle, sending, success, error
+  const [formMessage, setFormMessage] = useState('');
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setFormStatus('sending');
+
+    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form.current, 'YOUR_PUBLIC_KEY')
+      .then((result) => {
+          console.log(result.text);
+          setFormStatus('success');
+          setFormMessage('Message sent successfully!');
+          form.current.reset();
+      }, (error) => {
+          console.log(error.text);
+          setFormStatus('error');
+          setFormMessage('Failed to send message. Please try again later.');
+      });
+  };
 
   return (
     <div className="antialiased">
@@ -96,8 +118,7 @@ const HomePage = () => {
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">Contact Us</h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto text-center mb-12">Have questions? We'd love to hear from you.</p>
-          <form name="contact" method="POST" data-netlify="true" className="max-w-xl mx-auto">
-            <input type="hidden" name="form-name" value="contact" />
+          <form ref={form} onSubmit={sendEmail} className="max-w-xl mx-auto">
             <div className="mb-4">
               <label htmlFor="name" className="sr-only">Your Name</label>
               <input type="text" name="name" id="name" placeholder="Your Name" required className="w-full bg-gray-800 border border-gray-600 rounded-md py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
@@ -111,8 +132,12 @@ const HomePage = () => {
               <textarea name="message" id="message" rows="4" placeholder="Your Message" required className="w-full bg-gray-800 border border-gray-600 rounded-md py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
             </div>
             <div className="text-center">
-              <button type="submit" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-10 rounded-full transition-all duration-300 transform hover:scale-105">Send Message</button>
+              <button type="submit" className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-10 rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled={formStatus === 'sending'}>
+                {formStatus === 'sending' ? 'Sending...' : 'Send Message'}
+              </button>
             </div>
+            {formStatus === 'success' && <p className="mt-4 text-sm text-green-400 text-center">{formMessage}</p>}
+            {formStatus === 'error' && <p className="mt-4 text-sm text-red-500 text-center">{formMessage}</p>}
           </form>
         </div>
       </section>

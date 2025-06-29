@@ -1,57 +1,50 @@
 import Header from '../components/Header';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ReCAPTCHA from "react-google-recaptcha";
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle'); // idle, sending, success, error
   const [message, setMessage] = useState('');
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const recaptchaRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!recaptchaToken) {
-      setStatus('error');
-      setMessage('Please complete the reCAPTCHA verification.');
-      return;
-    }
-
     setStatus('sending');
     setMessage('');
 
-    try {
-      const response = await fetch('/.netlify/functions/verify-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, 'g-recaptcha-response': recaptchaToken }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'A server error occurred.');
-      }
-
-      if (result.is_safe) {
-        setStatus('success');
-        setMessage(result.message);
-        setEmail('');
-      } else {
+    if (typeof grecaptcha === 'undefined' || typeof grecaptcha.enterprise === 'undefined') {
         setStatus('error');
-        setMessage(result.message);
-      }
-    } catch (error) {
-      setStatus('error');
-      setMessage('Could not connect to the service. Please check your connection and try again.');
-      console.error('Submission Error:', error);
-    } finally {
-        if (recaptchaRef.current) {
-            recaptchaRef.current.reset();
+        setMessage('reCAPTCHA not loaded. Please check your connection or ad-blocker.');
+        return;
+    }
+
+    try {
+        const token = await grecaptcha.enterprise.execute('6Le9ZHErAAAAAHAxdgOhoGOq_sAAkLytmkwo9-Om', { action: 'SIGNUP' });
+
+        const response = await fetch('/.netlify/functions/verify-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, 'g-recaptcha-response': token }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'A server error occurred.');
         }
-        setRecaptchaToken(null);
+
+        if (result.is_safe) {
+            setStatus('success');
+            setMessage(result.message);
+            setEmail('');
+        } else {
+            setStatus('error');
+            setMessage(result.message);
+        }
+    } catch (error) {
+        setStatus('error');
+        setMessage('Could not connect to the service. Please check your connection and try again.');
+        console.error('Submission Error:', error);
     }
   };
 
@@ -80,19 +73,10 @@ const SignupPage = () => {
                   disabled={status === 'sending' || status === 'success'}
                 />
               </div>
-              <div className="mb-4 flex justify-center">
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey="6Le9ZHErAAAAAHAxdgOhoGOq_sAAkLytmkwo9-Om"
-                  onChange={(token) => setRecaptchaToken(token)}
-                  onExpired={() => setRecaptchaToken(null)}
-                  theme="dark"
-                />
-              </div>
               <button 
                 type="submit" 
                 className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-5 rounded-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={status === 'sending' || status === 'success' || !recaptchaToken}
+                disabled={status === 'sending' || status === 'success'}
               >
                 {status === 'sending' ? 'Verifying...' : status === 'success' ? 'Request Sent!' : 'Request Access'}
               </button>
