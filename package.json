@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf dist",
-    "copy-html": "cp -r templates/* dist/",
-    "copy-static": "cp -r static dist/",
-    "build": "npm run clean && mkdir dist && npm run copy-html && npm run copy-static"
-},
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -16,5 +15,8 @@
   "dependencies": {
     "netlify-cli": "^22.2.1",
     "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
   }
 }
