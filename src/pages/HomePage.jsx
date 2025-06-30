@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import emailjs from '@emailjs/browser';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Typewriter from 'typewriter-effect';
@@ -31,21 +30,38 @@ const HomePage = () => {
   const [formStatus, setFormStatus] = useState('idle'); // idle, sending, success, error
   const [formMessage, setFormMessage] = useState('');
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
     setFormStatus('sending');
 
-    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form.current, 'YOUR_PUBLIC_KEY')
-      .then((result) => {
-          console.log(result.text);
-          setFormStatus('success');
-          setFormMessage('Message sent successfully!');
-          form.current.reset();
-      }, (error) => {
-          console.log(error.text);
-          setFormStatus('error');
-          setFormMessage('Failed to send message. Please try again later.');
+    const formData = {
+      name: form.current.name.value,
+      email: form.current.email.value,
+      message: form.current.message.value,
+    };
+
+    try {
+      const response = await fetch('https://n8n.zephyrboost.com/webhook/notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        throw new Error('Webhook submission failed');
+      }
+
+      setFormStatus('success');
+      setFormMessage('Message sent successfully!');
+      form.current.reset();
+
+    } catch (error) {
+      console.error('Error sending form data:', error);
+      setFormStatus('error');
+      setFormMessage('Failed to send message. Please try again later.');
+    }
   };
 
   return (
