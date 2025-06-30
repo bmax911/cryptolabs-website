@@ -24,9 +24,7 @@ const LoginPage = () => {
     console.log("Received Google ID Token. Sending to backend...");
 
     // The API endpoint on your Heroku app
-    // IMPORTANT: If you have a Netlify proxy rewrite set up for /api, use that.
-    // Otherwise, use the full Heroku URL.
-    const backendApiUrl = 'https://cryptolabs-app.herokuapp.com/api/auth/google';
+    const backendApiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/auth/google`;
 
     try {
       const response = await fetch(backendApiUrl, {
