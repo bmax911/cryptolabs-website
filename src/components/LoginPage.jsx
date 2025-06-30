@@ -49,8 +49,8 @@ const LoginPage = () => {
       // Save your app's token to localStorage to keep the user logged in
       localStorage.setItem('authToken', appToken);
 
-      // Redirect the user to the main dashboard or reload the page to apply the login state
-      window.location.href = '/dashboard'; // or simply '/'
+      // Redirect the user to the pricing page to select a plan
+      window.location.href = '/pricing';
 
     } catch (error) {
       console.error("Error during Google sign-in process:", error);
