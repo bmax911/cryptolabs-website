@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleLogin } from '@react-oauth/google';
 import './SignupForm.css';
 
 const SignupForm = () => {
@@ -12,28 +12,42 @@ const SignupForm = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
-  const auth = getAuth();
 
-  const handleSocialSignup = async (providerName) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
     setError('');
+    setSuccessMessage('');
     setIsLoading(true);
 
-    const provider = providerName === 'google' 
-      ? new GoogleAuthProvider() 
-      : new OAuthProvider('microsoft.com');
-
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      // You can now use the user object for further actions,
-      // like creating a user document in your database.
-      console.log('Social signup successful:', user);
-      navigate('/dashboard'); // Redirect to dashboard on success
-    } catch (error) {
-      setError(error.message || 'Failed to sign up with social account.');
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: credentialResponse.credential }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Google sign-up failed.');
+      }
+
+      // Assuming the backend returns a token and user info
+      // You might want to store the token and redirect
+      setSuccessMessage('Sign-up successful! Redirecting to your dashboard...');
+      setTimeout(() => navigate('/dashboard'), 2000);
+
+    } catch (err) {
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error('Google Sign-Up Error:', error);
+    setError('Google sign-up failed. Please try again.');
   };
 
   const handleSubmit = async (e) => {
@@ -117,14 +131,15 @@ const SignupForm = () => {
         <div className="divider">OR</div>
 
         <div className="social-signup-container">
-          <button onClick={() => handleSocialSignup('google')} className="social-button google-button" disabled={isLoading}>
-            <span className="social-icon">G</span>
-            Sign Up with Google
-          </button>
-          <button onClick={() => handleSocialSignup('outlook')} className="social-button outlook-button" disabled={isLoading}>
-            <span className="social-icon">M</span>
-            Sign Up with Outlook
-          </button>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleFailure}
+            useOneTap
+            theme="outline"
+            size="large"
+            shape="pill"
+            width="300px"
+          />
         </div>
 
         <div className="login-link-container">
