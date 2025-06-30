@@ -65,7 +65,7 @@ const HomePage = () => {
               }}
             />
           </h1>
-          <p data-depth="0.03" className="hero-parallax text-lg md:text-xl max-w-3xl mx-auto text-white mb-8 scroll-animate">Your all-in-one platform for crypto trading cashback, AI-driven analysis, and automated planning.</p>
+          <p data-depth="0.03" className="hero-parallax text-lg md:text-xl max-w-3xl mx-auto text-white mb-8 scroll-animate" style={{ textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>Your all-in-one platform for crypto trading cashback, AI-driven analysis, and automated planning.</p>
           <Link to="/signup" data-depth="0.05" className="hero-parallax inline-block bg-primary hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 scroll-animate">
             Explore Features & Sign Up
           </Link>
