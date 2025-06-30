@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth';
 import './SignupForm.css';
 
 const SignupForm = () => {
@@ -11,6 +12,29 @@ const SignupForm = () => {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
+  const auth = getAuth();
+
+  const handleSocialSignup = async (providerName) => {
+    setError('');
+    setIsLoading(true);
+
+    const provider = providerName === 'google' 
+      ? new GoogleAuthProvider() 
+      : new OAuthProvider('microsoft.com');
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      // You can now use the user object for further actions,
+      // like creating a user document in your database.
+      console.log('Social signup successful:', user);
+      navigate('/dashboard'); // Redirect to dashboard on success
+    } catch (error) {
+      setError(error.message || 'Failed to sign up with social account.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,13 +117,11 @@ const SignupForm = () => {
         <div className="divider">OR</div>
 
         <div className="social-signup-container">
-          <button className="social-button google-button">
-            {/* Replace with a proper Google icon SVG or component */}
+          <button onClick={() => handleSocialSignup('google')} className="social-button google-button" disabled={isLoading}>
             <span className="social-icon">G</span>
             Sign Up with Google
           </button>
-          <button className="social-button outlook-button">
-            {/* Replace with a proper Outlook icon SVG or component */}
+          <button onClick={() => handleSocialSignup('outlook')} className="social-button outlook-button" disabled={isLoading}>
             <span className="social-icon">M</span>
             Sign Up with Outlook
           </button>
