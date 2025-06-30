@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import PricingPage from './pages/PricingPage';
-import AuthPage from './pages/AuthPage'; // Import AuthPage
+// import AuthPage from './pages/AuthPage'; // REMOVED - This file does not exist and is no longer needed.
 import TermsOfUsePage from './pages/TermsOfUsePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import CookiePolicyPage from './pages/CookiePolicyPage';
@@ -20,7 +20,7 @@ function App() {
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth" element={<AuthPage />} /> {/* Add AuthPage route */}
+          {/* <Route path="/auth" element={<AuthPage />} /> REMOVED - This route is no longer needed. */}
           <Route path="/terms-of-use" element={<TermsOfUsePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />
