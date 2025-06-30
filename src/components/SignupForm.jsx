@@ -90,6 +90,21 @@ const SignupForm = () => {
           </button>
         </form>
 
+        <div className="divider">OR</div>
+
+        <div className="social-signup-container">
+          <button className="social-button google-button">
+            {/* Replace with a proper Google icon SVG or component */}
+            <span className="social-icon">G</span>
+            Sign Up with Google
+          </button>
+          <button className="social-button outlook-button">
+            {/* Replace with a proper Outlook icon SVG or component */}
+            <span className="social-icon">M</span>
+            Sign Up with Outlook
+          </button>
+        </div>
+
         <div className="login-link-container">
           <p>
             Already have an account?{' '}

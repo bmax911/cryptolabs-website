@@ -139,6 +139,72 @@
   opacity: 0.6;
 }
 
+.divider {
+  margin: 1.5rem 0;
+  text-align: center;
+  color: #94a3b8;
+  font-weight: 600;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.social-signup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-button {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.social-button:hover {
+  border-color: #0ea5e9;
+}
+
+.google-button {
+  background-color: #db4437;
+}
+
+.outlook-button {
+  background-color: #0072c6;
+}
+
+.social-icon {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
 .login-link-container {
   margin-top: 1.5rem;
   color: #cbd5e1;
