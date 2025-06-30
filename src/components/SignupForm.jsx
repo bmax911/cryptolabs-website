@@ -1,8 +1,8 @@
 // src/components/SignupForm.jsx
 
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Assuming you use React Router for navigation
-import './SignupForm.css'; // We will create this CSS file next
+import { Link, useNavigate } from 'react-router-dom';
+import './SignupForm.css';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -10,22 +10,15 @@ const SignupForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
-  // Optional: Use React Router's navigate to redirect after login
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission which reloads the page
-
-    // Clear previous messages
+    e.preventDefault();
     setError('');
     setSuccessMessage('');
     setIsLoading(true);
 
-    // --- API Call to Your Heroku Backend ---
-    // IMPORTANT: Use '/api/register' if you set up a Netlify proxy.
-    // Otherwise, use the full Heroku URL: 'https://cryptolabs-app.herokuapp.com/api/register'
-    const apiUrl = '/api/register'; 
+    const apiUrl = '/api/register';
 
     try {
       const response = await fetch(apiUrl, {
@@ -39,25 +32,23 @@ const SignupForm = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle errors from the server (e.g., "User already exists")
         throw new Error(data.message || `HTTP error! Status: ${response.status}`);
       }
 
-      // Handle success
-      setSuccessMessage("Registration successful! An admin will review your application. You will be notified once you're approved.");
-      setEmail(''); // Clear form fields on success
+      setSuccessMessage("Registration successful! An admin will review your application. You will be notified once you\'re approved.");
+      setEmail('');
       setPassword('');
 
     } catch (err) {
-      // Handle network errors or errors thrown from the response check
       setError(err.message || 'An unknown error occurred. Please try again.');
     } finally {
-      setIsLoading(false); // Always stop loading state
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="signup-container">
+      <div className="animated-gradient-background"></div>
       <div className="signup-card">
         <h2>Create Your Account</h2>
         <p className="signup-subtitle">Join us to access exclusive financial insights.</p>

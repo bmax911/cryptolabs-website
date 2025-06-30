@@ -1,0 +1,81 @@
+/* src/components/Dashboard.css */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #0f172a; /* dark-bg */
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Animated Gradient Background */
+.animated-gradient-background {
+    background: linear-gradient(-45deg, #1e3a8a, #4f46e5, #06b6d4, #3b82f6);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.dashboard-card {
+  animation: fadeIn 0.8s ease-out forwards;
+  background-color: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-card h1 {
+  font-size: 2.25rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 8px rgba(0, 169, 255, 0.5);
+}
+
+.dashboard-card p {
+  color: #cbd5e1; /* dark-text-secondary */
+  margin-bottom: 2rem;
+}
+
+.logout-button {
+  background-color: #0ea5e9; /* primary */
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px; /* rounded-full */
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+.logout-button:hover {
+  background-color: #0284c7; /* hover:bg-cyan-600 */
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.6);
+}
