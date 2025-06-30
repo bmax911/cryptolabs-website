@@ -13,7 +13,7 @@ const Header = () => {
           <Link to="/" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Home</Link>
           <a href="/#features" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Features</a>
           <Link to="/pricing" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Pricing</Link>
-          <Link to="/news" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">News</Link>
+          <Link to="https://cryptolabs.zephyrboost.com/" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">News</Link>
           <Link to="/login" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Login</Link>
           <Link to="/signup" className="bg-primary hover:bg-cyan-600 text-white font-bold py-2 px-5 rounded-full transition-all duration-300">Sign Up</Link>
           <ThemeToggleButton />
@@ -26,7 +26,7 @@ const Header = () => {
         <Link to="/" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Home</Link>
         <a href="/#features" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Features</a>
         <Link to="/pricing" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Pricing</Link>
-        <Link to="/news" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">News</Link>
+        <Link to="https://cryptolabs.zephyrboost.com/" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">News</Link>
         <Link to="/login" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Login</Link>
         <Link to="/signup" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Sign Up</Link>
         <div className="px-6 py-2">
