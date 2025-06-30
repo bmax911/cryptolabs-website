@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import './LoginPage.css'; // We will create this CSS file next
 
 const LoginPage = () => {
@@ -9,9 +10,60 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Optional: Use React Router's navigate to redirect after login
   const navigate = useNavigate();
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    // This function is called when a user successfully signs in with Google.
+    // `credentialResponse.credential` contains Google's ID Token.
+    const googleIdToken = credentialResponse.credential;
+    setErrorMessage(''); // Clear previous errors
+    
+    console.log("Received Google ID Token. Sending to backend...");
+
+    // The API endpoint on your Heroku app
+    // IMPORTANT: If you have a Netlify proxy rewrite set up for /api, use that.
+    // Otherwise, use the full Heroku URL.
+    const backendApiUrl = 'https://cryptolabs-app.herokuapp.com/api/auth/google';
+
+    try {
+      const response = await fetch(backendApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: googleIdToken }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle errors from your backend (e.g., "Invalid token")
+        throw new Error(data.message || 'Login with Google failed.');
+      }
+
+      // SUCCESS! Your backend has returned YOUR application's JWT.
+      const appToken = data.token;
+      console.log("Success! Received our application's JWT:", appToken);
+
+      // Save your app's token to localStorage to keep the user logged in
+      localStorage.setItem('authToken', appToken);
+
+      // Redirect the user to the main dashboard or reload the page to apply the login state
+      window.location.href = '/dashboard'; // or simply '/'
+
+    } catch (error) {
+      console.error("Error during Google sign-in process:", error);
+      setErrorMessage(error.message);
+    }
+  };
+
+  const handleGoogleError = () => {
+    console.error('Google Login Failed');
+    setErrorMessage("Google sign-in failed. Please try again.");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission which reloads the page
@@ -81,7 +133,7 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength="6"
+              minLength="8"
               placeholder="••••••••"
               disabled={isLoading}
             />
@@ -94,6 +146,23 @@ const LoginPage = () => {
             {isLoading ? 'Logging In...' : 'Log In'}
           </button>
         </form>
+
+        {errorMessage && <p className="message error-message">{errorMessage}</p>}
+
+        <div style={{ textAlign: 'center', margin: '20px 0', color: '#666' }}>
+          <p>OR</p>
+        </div>
+
+        {/* --- The Google Login Button --- */}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            theme="outline"
+            size="large"
+            text="signin_with"
+          />
+        </div>
 
         <div className="signup-link-container">
           <p>
