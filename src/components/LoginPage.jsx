@@ -16,16 +16,10 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    // This function is called when a user successfully signs in with Google.
-    // `credentialResponse.credential` contains Google's ID Token.
+    setErrorMessage('');
+    setIsLoading(true);
     const googleIdToken = credentialResponse.credential;
-    setErrorMessage(''); // Clear previous errors
-    
-    console.log("Received Google ID Token. Sending to backend...");
-
-    // The API endpoint on your Heroku app
     const backendApiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/auth/google`;
-
     try {
       const response = await fetch(backendApiUrl, {
         method: 'POST',
@@ -33,28 +27,22 @@ const LoginPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ token: googleIdToken }),
+        credentials: 'include',
       });
-
       const data = await response.json();
-
       if (!response.ok) {
-        // Handle errors from your backend (e.g., "Invalid token")
-        throw new Error(data.message || 'Login with Google failed.');
+        throw new Error(data.error || data.message || 'Login with Google failed.');
       }
-
-      // SUCCESS! Your backend has returned YOUR application's JWT.
       const appToken = data.token;
-      console.log("Success! Received our application's JWT:", appToken);
-
-      // Save your app's token to localStorage to keep the user logged in
+      if (!appToken) {
+        throw new Error('Authentication successful, but no token was received.');
+      }
       localStorage.setItem('authToken', appToken);
-
-      // Redirect the user to the dashboard page
       navigate('/dashboard');
-
     } catch (error) {
-      console.error("Error during Google sign-in process:", error);
       setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,17 +52,10 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission which reloads the page
-
-    // Clear previous messages
+    e.preventDefault();
     setError('');
     setIsLoading(true);
-
-    // --- API Call to Your Heroku Backend ---
-    // IMPORTANT: Use '/api/login' if you set up a Netlify proxy.
-    // Otherwise, use the full Heroku URL: 'https://cryptolabs-app.herokuapp.com/api/login'
-    const apiUrl = '/api/login'; 
-
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`;
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -82,24 +63,22 @@ const LoginPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
+        credentials: 'include',
       });
-
       const data = await response.json();
-
       if (!response.ok) {
-        // Handle errors from the server (e.g., "Invalid credentials")
-        throw new Error(data.message || `HTTP error! Status: ${response.status}`);
+        throw new Error(data.error || data.message || `HTTP error! Status: ${response.status}`);
       }
-
-      // Handle success
-      // You might want to store a token and redirect to a dashboard
+      const appToken = data.token;
+      if (!appToken) {
+        throw new Error('Login successful, but no token was received.');
+      }
+      localStorage.setItem('authToken', appToken);
       navigate('/dashboard');
-
     } catch (err) {
-      // Handle network errors or errors thrown from the response check
       setError(err.message || 'An unknown error occurred. Please try again.');
     } finally {
-      setIsLoading(false); // Always stop loading state
+      setIsLoading(false);
     }
   };
 

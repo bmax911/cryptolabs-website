@@ -19,6 +19,7 @@ const SignupForm = () => {
     setIsLoading(true);
 
     try {
+      // Flask backend endpoint for Google OAuth
       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`, {
         method: 'POST',
         headers: {
@@ -31,19 +32,17 @@ const SignupForm = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || 'Google sign-up failed.');
+        throw new Error(data.message || data.error || 'Google sign-up failed.');
       }
 
-      // The backend returns an authentication token. We need to save it.
       const appToken = data.token;
       if (!appToken) {
         throw new Error('Authentication successful, but no token was received.');
       }
 
-      // Save the token to localStorage to keep the user logged in.
       localStorage.setItem('authToken', appToken);
       setSuccessMessage('Sign-up successful! Redirecting...');
-      setTimeout(() => navigate('/pricing'), 2000); // Redirect to pricing, similar to login flow.
+      setTimeout(() => navigate('/pricing'), 2000);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -62,8 +61,8 @@ const SignupForm = () => {
     setSuccessMessage('');
     setIsLoading(true);
 
-    // Corrected the API URL to point to the Heroku backend
-    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`;
+    // Flask backend endpoint for registration
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/register`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -78,13 +77,13 @@ const SignupForm = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || `HTTP error! Status: ${response.status}`);
+        throw new Error(data.message || data.error || `HTTP error! Status: ${response.status}`);
       }
 
-      setSuccessMessage("Registration successful! An admin will review your application. You will be notified once you\'re approved.");
+      setSuccessMessage("Registration successful! You can now log in.");
       setEmail('');
       setPassword('');
-
+      setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
       setError(err.message || 'An unknown error occurred. Please try again.');
     } finally {
