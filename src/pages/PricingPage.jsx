@@ -2,14 +2,66 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
+// It's crucial to keep your client ID in an environment variable for security.
+const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID;
+
+const Checkout = ({ currency, plan, price }) => {
+    if (!PAYPAL_CLIENT_ID) {
+        console.error("PayPal Client ID is not defined. Please set VITE_PAYPAL_CLIENT_ID in your .env file.");
+        return <div className="text-red-500 text-center">PayPal is not configured.</div>;
+    }
+
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    description: `CryptoLabs ${plan} Plan`,
+                    amount: {
+                        currency_code: currency,
+                        value: price,
+                    },
+                },
+            ],
+        });
+    };
+
+    const onApprove = (data, actions) => {
+        return actions.order.capture().then((details) => {
+            alert(`Transaction completed by ${details.payer.name.given_name}!`);
+            console.log('Payment successful:', details);
+            // Here you would typically handle post-payment logic,
+            // like updating user status in your database.
+        });
+    };
+
+    const onError = (err) => {
+        console.error("PayPal Checkout Error:", err);
+        alert("An error occurred during the PayPal checkout. Please try again.");
+    };
+
+    return (
+        <PayPalButtons
+            style={{ layout: "vertical", color: 'blue', shape: 'rect', label: 'paypal' }}
+            createOrder={createOrder}
+            onApprove={onApprove}
+            onError={onError}
+        />
+    );
+};
+
 
 const PricingPage = () => {
   const [currency, setCurrency] = useState('USD');
 
   const prices = {
-    USD: { basic: 29, pro: 99, enterprise: 249 },
-    EUR: { basic: 25, pro: 89, enterprise: 229 },
-    USDT: { basic: 30, pro: 100, enterprise: 250 },
+    USD: { basic: '29.00', pro: '99.00', enterprise: '249.00' },
+    EUR: { basic: '25.00', pro: '89.00', enterprise: '229.00' },
+    // Note: PayPal does not directly support USDT. 
+    // This would require a different integration or conversion process.
+    // For this example, we will disable PayPal for USDT.
+    USDT: { basic: '30.00', pro: '100.00', enterprise: '250.00' },
   };
 
   const currencySymbols = {
@@ -19,8 +71,9 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="antialiased">
-      <Header />
+    <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID, currency: currency }}>
+        <div className="antialiased">
+        <Header />
 
       {/* PRICING SECTION */}
       <main className="min-h-screen animated-gradient pt-32 pb-20">
@@ -49,7 +102,13 @@ const PricingPage = () => {
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Basic AI Analysis</li>
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Calendar Integration</li>
               </ul>
-              <Link to="/signup" className="mt-auto w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Get Started</Link>
+              <div className="mt-auto">
+                {currency !== 'USDT' ? (
+                    <Checkout currency={currency} plan="Basic" price={prices[currency].basic} />
+                ) : (
+                    <Link to="/signup" className="w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Get Started with USDT</Link>
+                )}
+              </div>
             </div>
 
             {/* Pro Plan */}
@@ -63,7 +122,13 @@ const PricingPage = () => {
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Advanced AI Analysis &amp; Signals</li>
                 <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Priority Support</li>
               </ul>
-              <Link to="/signup" className="mt-auto w-full text-center bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Choose Pro</Link>
+              <div className="mt-auto">
+                {currency !== 'USDT' ? (
+                    <Checkout currency={currency} plan="Pro" price={prices[currency].pro} />
+                ) : (
+                    <Link to="/signup" className="w-full text-center bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Choose Pro with USDT</Link>
+                )}
+              </div>
             </div>
 
             {/* Enterprise Plan */}
@@ -84,6 +149,7 @@ const PricingPage = () => {
 
       <Footer />
     </div>
+    </PayPalScriptProvider>
   );
 };
 
