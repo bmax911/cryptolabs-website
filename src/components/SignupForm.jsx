@@ -33,11 +33,16 @@ const SignupForm = () => {
         throw new Error(data.message || 'Google sign-up failed.');
       }
 
-      // Assuming the backend returns a token and user info
-      // You might want to store the token and redirect
-      setSuccessMessage('Sign-up successful! Redirecting to your dashboard...');
-      setTimeout(() => navigate('/dashboard'), 2000);
+      // The backend returns an authentication token. We need to save it.
+      const appToken = data.token;
+      if (!appToken) {
+        throw new Error('Authentication successful, but no token was received.');
+      }
 
+      // Save the token to localStorage to keep the user logged in.
+      localStorage.setItem('authToken', appToken);
+      setSuccessMessage('Sign-up successful! Redirecting...');
+      setTimeout(() => navigate('/pricing'), 2000); // Redirect to pricing, similar to login flow.
     } catch (err) {
       setError(err.message);
     } finally {
