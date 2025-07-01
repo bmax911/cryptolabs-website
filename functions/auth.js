@@ -5,36 +5,35 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
-// A more flexible CORS policy for Netlify and local development
+// --- CORS Configuration ---
+// Define the list of allowed origins (your frontend domains)
 const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://cryptolabs.icu', // Your production domain
+    'https://cryptolabs.icu', 
+    'http://localhost:5173', // for local dev
 ];
 
 const corsOptions = {
     origin: (origin, callback) => {
-        // Log the origin for every request for debugging purposes
+        // Log every origin for debugging
         console.log(`Request from origin: ${origin}`);
-
+        
         // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-
-        // Allow all subdomains of netlify.app for preview builds
-        if (/(^https?:\/\/([a-z0-9\\-]+_)+[a-z0-9\\-]+\\.netlify\\.app$)/.test(origin)) {
-            return callback(null, true);
+        // or if the origin is in our allowed list.
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.error(`CORS error: Origin ${origin} not allowed.`);
+            callback(new Error('Not allowed by CORS'));
         }
-
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            return callback(null, true);
-        }
-
-        callback(new Error('Not allowed by CORS'));
-    }
+    },
+    credentials: true, // Important for cookies, authorization headers
 };
 
+// Enable pre-flight requests for all routes
+app.options('*', cors(corsOptions));
+
+// Use the CORS middleware for all other requests
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
 app.use(express.json());
 
