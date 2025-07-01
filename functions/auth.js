@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const {OAuth2Client} = require('google-auth-library');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 
@@ -55,11 +56,24 @@ const client = new OAuth2Client(googleClientId);
 // Create a router for /api/auth
 const authRouter = express.Router();
 
+// In-memory user store for demonstration (replace with DB in production)
+const users = [];
+
 // Placeholder for manual registration
 authRouter.post("/register", async (req, res) => {
-    // In a real app, you would validate the email and password,
-    // hash the password, and save the user to your database.
-    const { email } = req.body;
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required." });
+    }
+    // Check if user already exists
+    const existingUser = users.find(u => u.email === email);
+    if (existingUser) {
+        return res.status(409).json({ error: "User already exists." });
+    }
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Store user (replace with DB insert in production)
+    users.push({ email, password: hashedPassword });
     console.log(`Registration attempt for email: ${email}`);
     res.status(200).json({ message: "Registration successful! Please check your email for verification." });
 });
@@ -96,6 +110,27 @@ authRouter.post("/google", async (req, res) => {
         console.error("Error verifying Google token:", error);
         res.status(401).json({ error: "Invalid Google token." });
     }
+});
+
+// Login endpoint
+// POST /api/auth/login
+// Accepts: { email, password }
+authRouter.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required." });
+    }
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(401).json({ error: "Invalid credentials." });
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+        return res.status(401).json({ error: "Invalid credentials." });
+    }
+    // Create JWT token
+    const token = jwt.sign({ email: user.email }, jwtSecret, { expiresIn: '1h' });
+    res.status(200).json({ token });
 });
 
 // Use the router for /api/auth path
