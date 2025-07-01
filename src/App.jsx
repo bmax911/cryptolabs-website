@@ -11,6 +11,7 @@ import SignupForm from './components/SignupForm';
 import LoginPage from './components/LoginPage'; // Assuming you have a login page component
 import Dashboard from './components/Dashboard'; // Your main app dashboard
 import NewsRedirect from './components/NewsRedirect'; // Import the new component
+import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
 
 function App() {
   return (
@@ -26,7 +27,14 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />
           <Route path="/disclaimer" element={<DisclaimerPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="/news" element={<NewsRedirect />} />
         </Routes>
         <CookieConsentBanner />

@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import { ThemeProvider } from './contexts/ThemeContext.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { AuthProvider } from './contexts/AuthContext.jsx'; // Import AuthProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -17,7 +18,9 @@ root.render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={googleClientId}>
       <ThemeProvider>
-        <App />
+        <AuthProvider> // Wrap App with AuthProvider
+          <App />
+        </AuthProvider>
       </ThemeProvider>
     </GoogleOAuthProvider>
   </React.StrictMode>
