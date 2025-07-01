@@ -54,7 +54,7 @@ const HomePage = () => {
       }
 
       setFormStatus('success');
-      setFormMessage('Message sent successfully!');
+      setFormMessage('We received your message!');
       form.current.reset();
 
     } catch (error) {

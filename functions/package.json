@@ -1,21 +1,18 @@
 {
   "name": "functions",
   "scripts": {
-  "serve": "firebase emulators:start --only functions",
-  "shell": "firebase functions:shell",
-  "start": "npm run shell",
-  "deploy": "firebase deploy --only functions"
-},
+    "start": "node index.js",
+    "deploy": "firebase deploy --only functions"
+  },
   "engines": {
     "node": "22"
   },
   "main": "index.js",
   "dependencies": {
-    "firebase-admin": "^12.6.0",
-    "firebase-functions": "^6.0.1",
     "express": "^4.19.2",
     "cors": "^2.8.5",
-    "google-auth-library": "^9.10.0"
+    "google-auth-library": "^9.10.0",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.0",

@@ -1,18 +1,36 @@
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
 const express = require("express");
 const cors = require("cors");
 const {OAuth2Client} = require('google-auth-library');
+const jwt = require('jsonwebtoken');
 
 const app = express();
-app.use(cors({ origin: true }));
 
-// It's recommended to set the client ID in Firebase environment configuration
-// firebase functions:config:set google.client_id="YOUR_GOOGLE_CLIENT_ID"
-const googleClientId = process.env.GOOGLE_CLIENT_ID || functions.config().google.client_id;
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://app.netlify.com',
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+}));
+
+app.use(express.json());
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const jwtSecret = process.env.JWT_SECRET;
 
 if (!googleClientId) {
-    console.error("FATAL ERROR: google.client_id is not defined in Firebase config. Please set it.");
+    console.error("FATAL ERROR: GOOGLE_CLIENT_ID is not defined in environment variables.");
+}
+if (!jwtSecret) {
+    console.error("FATAL ERROR: JWT_SECRET is not defined in environment variables.");
 }
 
 const client = new OAuth2Client(googleClientId);
@@ -35,28 +53,17 @@ app.post("/google", async (req, res) => {
             return res.status(401).json({ error: "Email not verified by Google." });
         }
 
-        let user;
-        try {
-            user = await admin.auth().getUserByEmail(email);
-        } catch (error) {
-            if (error.code === 'auth/user-not-found') {
-                // Create a new user if they don't exist
-                user = await admin.auth().createUser({
-                    email,
-                    displayName: name,
-                    photoURL: picture,
-                    emailVerified: true,
-                });
-            } else {
-                // For other errors, rethrow
-                throw error;
-            }
-        }
+        // Here you would typically find or create a user in your own database.
+        // For this example, we'll just create a JWT with the user's info.
+        const user = {
+            email,
+            name,
+            picture
+        };
 
-        // Create a custom Firebase token for the user to sign in with on the client
-        const customToken = await admin.auth().createCustomToken(user.uid);
+        const jwtToken = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
 
-        res.status(200).json({ token: customToken });
+        res.status(200).json({ token: jwtToken });
 
     } catch (error) {
         console.error("Error verifying Google token:", error);
@@ -69,5 +76,4 @@ app.listen(port, () => {
     console.log(`API listening on port ${port}`);
 });
 
-// Base path for auth functions
-exports.api = functions.https.onRequest(app);
+module.exports = { app };
