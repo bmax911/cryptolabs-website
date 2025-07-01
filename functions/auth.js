@@ -95,9 +95,10 @@ authRouter.post("/google", async (req, res) => {
 // Use the router for /api/auth path
 app.use('/api/auth', authRouter);
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-    console.log(`API listening on port ${port}`);
-});
+// The listen call is removed from here and moved to index.js
+// const port = process.env.PORT || 3001;
+// app.listen(port, () => {
+//     console.log(`API listening on port ${port}`);
+// });
 
-module.exports = { app };
+module.exports = app;
