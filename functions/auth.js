@@ -8,6 +8,7 @@ const app = express();
 // --- CORS Configuration ---
 const allowedOrigins = [
     'https://cryptolabs.icu', 
+    'https://www.cryptolabs.cfd',
     'http://localhost:5173', // for local dev
 ];
 
