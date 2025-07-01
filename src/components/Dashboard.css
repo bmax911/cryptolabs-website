@@ -79,3 +79,34 @@
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(14, 165, 233, 0.6);
 }
+
+.weather-decoration {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: rgba(17, 24, 39, 0.7);
+  border-radius: 1.5rem;
+  padding: 0.5rem 1.2rem;
+  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.18);
+  z-index: 10;
+  animation: fadeIn 1s;
+}
+.weather-animated-icon {
+  width: 48px;
+  height: 48px;
+  margin-right: 1rem;
+  animation: weather-bounce 2s infinite alternate;
+}
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  font-size: 1rem;
+  gap: 0.1rem;
+}
+@keyframes weather-bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}

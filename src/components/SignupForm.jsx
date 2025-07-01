@@ -42,7 +42,7 @@ const SignupForm = () => {
 
       localStorage.setItem('authToken', appToken);
       setSuccessMessage('Sign-up successful! Redirecting...');
-      setTimeout(() => navigate('/pricing'), 2000);
+      setTimeout(() => navigate('/dashboard'), 2000);
     } catch (err) {
       setError(err.message);
     } finally {
