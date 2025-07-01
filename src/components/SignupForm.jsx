@@ -61,7 +61,8 @@ const SignupForm = () => {
     setSuccessMessage('');
     setIsLoading(true);
 
-    const apiUrl = '/api/register';
+    // Corrected the API URL to point to the Heroku backend
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`;
 
     try {
       const response = await fetch(apiUrl, {

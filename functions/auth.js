@@ -5,28 +5,30 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
-// Updated CORS configuration
+// Reverted to a secure CORS policy
 const allowedOrigins = [
-    'http://localhost:3000', // Keep for local dev
-    'http://localhost:5173', // Keep for local dev (Vite)
-    'https://app.netlify.com', // For Netlify deployment process
+    'http://localhost:3000',
+    'http://localhost:5173',
     'https://cryptolabs.icu', // Your production domain
-    process.env.NETLIFY_URL // Add your Netlify production URL from env vars
+    process.env.NETLIFY_URL
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
         }
-        return callback(null, true);
     }
 }));
 
 app.use(express.json());
+
+// Simple test route to check if the server is running
+app.get("/", (req, res) => {
+    res.json({ status: "ok", message: "Backend is running." });
+});
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const jwtSecret = process.env.JWT_SECRET;
@@ -42,6 +44,15 @@ const client = new OAuth2Client(googleClientId);
 
 // Create a router for /api/auth
 const authRouter = express.Router();
+
+// Placeholder for manual registration
+authRouter.post("/register", async (req, res) => {
+    // In a real app, you would validate the email and password,
+    // hash the password, and save the user to your database.
+    const { email } = req.body;
+    console.log(`Registration attempt for email: ${email}`);
+    res.status(200).json({ message: "Registration successful! Please check your email for verification." });
+});
 
 authRouter.post("/google", async (req, res) => {
     const { token } = req.body;
