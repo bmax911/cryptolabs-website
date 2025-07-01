@@ -5,27 +5,39 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
-// Reverted to a secure CORS policy
+// A more flexible CORS policy for production and local development
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://cryptolabs.icu', // Your production domain
+    'https://cryptolabs.icu', // Your production frontend
+    'https://www.cryptolabs.cfd' // Your production backend
 ];
 
 const corsOptions = {
     origin: (origin, callback) => {
-        // Log the origin for debugging
-        console.log(`Request from origin: ${origin}`);
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Log the origin for every request for debugging purposes
+        console.log(`CORS check for origin: ${origin}`);
+
+        // Allow requests with no origin (like server-to-server or curl requests)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
+            console.error(`Origin not allowed by CORS: ${origin}`);
             callback(new Error('Not allowed by CORS'));
         }
-    }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
+// Use CORS middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
+
+// Explicitly handle preflight requests
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
