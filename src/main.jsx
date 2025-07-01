@@ -18,7 +18,7 @@ root.render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={googleClientId}>
       <ThemeProvider>
-        <AuthProvider> // Wrap App with AuthProvider
+        <AuthProvider>
           <App />
         </AuthProvider>
       </ThemeProvider>
