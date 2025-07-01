@@ -10,18 +10,22 @@ const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5173',
     'https://cryptolabs.icu', // Your production domain
-    process.env.NETLIFY_URL
 ];
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Log the origin for debugging
+        console.log(`Request from origin: ${origin}`);
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     }
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
 app.use(express.json());
 
