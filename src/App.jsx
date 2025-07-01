@@ -22,7 +22,6 @@ function App() {
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/login" element={<LoginPage />} />
-          {/* <Route path="/auth" element={<AuthPage />} /> REMOVED - This route is no longer needed. */}
           <Route path="/terms-of-use" element={<TermsOfUsePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />
