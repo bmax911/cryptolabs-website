@@ -1,15 +1,10 @@
-const admin = require("firebase-admin");
-require('./auth');
+// Import the configured Express app
+const app = require('./auth'); 
 
-admin.initializeApp();
-
-// Export the auth api
-exports.api = require("./auth").api;
-
-const app = require('./auth'); // Import the express app from auth.js
-
+// Get the port from Heroku's environment variables, with a fallback for local testing
 const PORT = process.env.PORT || 3001;
 
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
