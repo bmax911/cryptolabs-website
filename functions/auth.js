@@ -5,19 +5,24 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
+// Updated CORS configuration
 const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://app.netlify.com',
+    'http://localhost:3000', // Keep for local dev
+    'http://localhost:5173', // Keep for local dev (Vite)
+    'https://app.netlify.com', // For Netlify deployment process
+    'https://cryptolabs.icu', // Your production domain
+    process.env.NETLIFY_URL // Add your Netlify production URL from env vars
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
         }
+        return callback(null, true);
     }
 }));
 
@@ -35,7 +40,10 @@ if (!jwtSecret) {
 
 const client = new OAuth2Client(googleClientId);
 
-app.post("/google", async (req, res) => {
+// Create a router for /api/auth
+const authRouter = express.Router();
+
+authRouter.post("/google", async (req, res) => {
     const { token } = req.body;
     if (!token) {
         return res.status(400).json({ error: "ID token not provided." });
@@ -53,8 +61,6 @@ app.post("/google", async (req, res) => {
             return res.status(401).json({ error: "Email not verified by Google." });
         }
 
-        // Here you would typically find or create a user in your own database.
-        // For this example, we'll just create a JWT with the user's info.
         const user = {
             email,
             name,
@@ -70,6 +76,9 @@ app.post("/google", async (req, res) => {
         res.status(401).json({ error: "Invalid Google token." });
     }
 });
+
+// Use the router for /api/auth path
+app.use('/api/auth', authRouter);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
