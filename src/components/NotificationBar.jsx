@@ -9,7 +9,7 @@ const NotificationBar = ({ notifications }) => (
         </div>
       ))
     ) : (
-      <div className="notification notification-info">No new notifications</div>
+      <div className="notification notification-info">Welcome Home! Investors</div>
     )}
   </div>
 );
