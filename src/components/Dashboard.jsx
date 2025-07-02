@@ -19,6 +19,7 @@ const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
 
 const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY || import.meta.env.WEATHER_API_KEY;
 
+
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const [weather, setWeather] = useState(null);
@@ -26,6 +27,7 @@ const Dashboard = () => {
   const [cryptoData, setCryptoData] = useState(null);
   const [cryptoLoading, setCryptoLoading] = useState(true);
   const [cryptoError, setCryptoError] = useState(null);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   // Fetch WeatherAPI.com current weather and air quality, require geolocation
   useEffect(() => {
@@ -68,9 +70,11 @@ const Dashboard = () => {
     // navigate('/login');
   };
 
+  const handleSidebarToggle = () => setSidebarExpanded((prev) => !prev);
+
   return (
     <div className="dashboard-root">
-      <Sidebar onLogout={handleLogout} />
+      <Sidebar onLogout={handleLogout} expanded={sidebarExpanded} onToggle={handleSidebarToggle} />
       <div className="dashboard-mainarea">
         <TopNav user={user} />
         <div className="dashboard-content-area">

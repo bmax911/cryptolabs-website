@@ -156,9 +156,9 @@ body, .dashboard-container {
   text-align: center;
 }
 .sidebar-menu li:hover, .sidebar-menu .logout-link:hover {
-  background: rgba(0,255,255,0.12);
-  color: #00fff7;
-  box-shadow: 0 0 8px #00fff7;
+  background: rgba(0,255,255,0.18);
+  color: #00e6d6;
+  box-shadow: 0 0 8px #00e6d6;
 }
 .logout-link {
   color: #ff6b81 !important;
@@ -243,9 +243,9 @@ body, .dashboard-container {
   overflow: hidden;
 }
 .crypto-card:hover {
-  background: #00fff7;
+  background: #00e6d6;
   color: #0f172a;
-  box-shadow: 0 0 24px #00fff7;
+  box-shadow: 0 0 16px #00e6d6;
 }
 .crypto-icon {
   width: 32px;
@@ -305,7 +305,24 @@ body, .dashboard-container {
   z-index: 10;
   border-top-right-radius: 2rem;
   border-bottom-right-radius: 2rem;
+  transition: width 0.2s cubic-bezier(.4,0,.2,1);
+  overflow: visible;
 }
+.sidebar-menu-fixed.expanded {
+  width: 200px !important;
+  min-width: 200px !important;
+  align-items: flex-start;
+}
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  color: #00fff7;
+  font-size: 1.2rem;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.2s;
+}
+
 .sidebar-menu-fixed ul {
   list-style: none;
   padding: 0;
@@ -327,9 +344,9 @@ body, .dashboard-container {
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .sidebar-menu-fixed li:hover, .sidebar-menu-fixed .logout-link:hover {
-  background: rgba(0,255,255,0.12);
-  color: #00fff7;
-  box-shadow: 0 0 8px #00fff7;
+  background: rgba(0,255,255,0.18);
+  color: #00e6d6;
+  box-shadow: 0 0 8px #00e6d6;
 }
 .logout-link {
   color: #ff6b81 !important;
@@ -418,9 +435,9 @@ body, .dashboard-container {
   font-family: 'Montserrat', Arial, sans-serif;
 }
 .kpi-card:hover {
-  background: #00fff7;
+  background: #00e6d6;
   color: #0f172a;
-  box-shadow: 0 0 24px #00fff7;
+  box-shadow: 0 0 16px #00e6d6;
 }
 .kpi-icon {
   font-size: 1.7rem;
