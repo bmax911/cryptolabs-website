@@ -35,6 +35,7 @@
 .input-group {
   margin-bottom: 20px;
   text-align: left;
+  display: none !important; /* Remove manual login fields */
 }
 
 .input-group label {
@@ -71,6 +72,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
+  display: none !important; /* Hide login button */
 }
 
 .login-button:hover:not(:disabled) {
