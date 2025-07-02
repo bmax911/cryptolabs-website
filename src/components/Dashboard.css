@@ -506,18 +506,22 @@ body, .dashboard-container {
 
 .dashboard-charts {
   display: flex;
-  gap: 2.5rem;
-  margin-bottom: 2.5rem;
   flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-bottom: 0;
+  width: 100%;
+  max-width: 2000px;
+  box-sizing: border-box;
 }
 .dashboard-charts-large {
   width: 100%;
-  max-width: 2000px;
-  margin: 0 auto 2.5rem auto;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 .chart-placeholder {
-  flex: 1 1 0;
-  min-width: 340px;
+  flex: 1 1 420px;
+  min-width: 320px;
+  max-width: 100%;
   min-height: 320px;
   background: rgba(0,255,255,0.06);
   border-radius: 1.2rem;
@@ -528,7 +532,23 @@ body, .dashboard-container {
   color: #b5eaff;
   font-size: 1.1rem;
   box-shadow: 0 0 8px #00fff7;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-left: 0;
+  padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+  box-sizing: border-box;
+}
+.dashboard-table {
+  background: rgba(0,255,255,0.06);
+  border-radius: 1.2rem;
+  box-shadow: 0 0 8px #00fff7;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  overflow-x: auto;
+  margin: 2.5rem auto 0 auto;
+  width: 100%;
+  max-width: 2000px;
+  box-sizing: border-box;
 }
 .chart-controls {
   display: flex;
@@ -741,11 +761,18 @@ body, .dashboard-container {
   .dashboard-charts {
     flex-direction: column;
     gap: 1.2rem;
+    width: 100%;
+    max-width: 100vw;
   }
   .chart-placeholder {
     min-width: 0;
     width: 100%;
     min-height: 220px;
+    padding: 1rem 0.2rem 1rem 0.2rem;
+  }
+  .dashboard-table {
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    margin: 2rem 0 0 0;
   }
   .chart-controls {
     flex-direction: column;
@@ -764,6 +791,10 @@ body, .dashboard-container {
   }
   .dashboard-table th, .dashboard-table td {
     padding: 0.5rem 0.5rem;
+  }
+  .dashboard-table {
+    padding: 0.7rem 0.1rem 0.7rem 0.1rem;
+    margin: 1.2rem 0 0 0;
   }
   .chart-controls {
     padding: 0.5rem 0.2rem;
