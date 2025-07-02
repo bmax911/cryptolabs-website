@@ -14,6 +14,7 @@ import WeatherWidget from './WeatherWidget';
 import NotificationBar from './NotificationBar';
 import DashboardCharts from './DashboardCharts';
 import DashboardTable from './DashboardTable';
+import ThemeToggleButton from './ThemeToggleButton';
 
 const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
 
@@ -81,6 +82,7 @@ const Dashboard = () => {
           <div className="dashboard-header-row">
             <KpiCards />
             <WeatherWidget weather={weather} />
+            <ThemeToggleButton />
           </div>
           <NotificationBar notifications={[]} />
           <DashboardCharts />

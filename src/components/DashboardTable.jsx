@@ -83,7 +83,7 @@ const DashboardTable = () => {
                 <td>{row.date}</td>
                 <td>{row.type}</td>
                 <td>{row.amount}</td>
-                <td><StatusPill status={row.status} /></td>
+                <td className="status-cell"><StatusPill status={row.status} /></td>
               </tr>
             ))}
           </tbody>
