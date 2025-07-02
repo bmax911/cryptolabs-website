@@ -74,7 +74,7 @@ const DashboardTable = () => {
               <th onClick={() => requestSort('date')}>Date {getSortIndicator('date')}</th>
               <th onClick={() => requestSort('type')}>Type {getSortIndicator('type')}</th>
               <th onClick={() => requestSort('amount')}>Amount {getSortIndicator('amount')}</th>
-              <th onClick={() => requestSort('status')}>Status {getSortIndicator('status')}</th>
+              <th onClick={() => requestSort('status')} className="status-cell">Status {getSortIndicator('status')}</th>
             </tr>
           </thead>
           <tbody>
