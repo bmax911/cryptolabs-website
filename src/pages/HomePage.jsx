@@ -1,5 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import CountUp from 'react-countup';
+import { useInView } from 'react-intersection-observer';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Typewriter from 'typewriter-effect';
@@ -64,6 +66,23 @@ const HomePage = () => {
     }
   };
 
+  const Stat = ({ end, suffix, label }) => {
+    const { ref, inView } = useInView({
+      triggerOnce: true, // Animate only once
+      threshold: 0.1, // Trigger when 10% of the element is visible
+    });
+
+    return (
+      <div ref={ref} className="stat-card p-8 scroll-animate">
+        <div className="stat-glow"></div>
+        <h3 className="text-4xl font-bold text-primary">
+          {inView ? <CountUp end={end} duration={2.5} suffix={suffix} /> : '0'}
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">{label}</p>
+      </div>
+    );
+  };
+
   return (
     <>
       <Header />
@@ -121,21 +140,9 @@ const HomePage = () => {
       <section id="stats" className="py-20 md:py-24 bg-light-bg dark:bg-dark-bg">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="stat-card p-8 scroll-animate">
-              <div className="stat-glow"></div>
-              <h3 className="text-4xl font-bold text-primary">500K+</h3>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">USD Trading Fee Saved</p>
-            </div>
-            <div className="stat-card p-8 scroll-animate">
-              <div className="stat-glow"></div>
-              <h3 className="text-4xl font-bold text-primary">12,873+</h3>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">Happy Clients</p>
-            </div>
-            <div className="stat-card p-8 scroll-animate">
-              <div className="stat-glow"></div>
-              <h3 className="text-4xl font-bold text-primary">1M+</h3>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">AI-Supported Trading Orders</p>
-            </div>
+            <Stat end={500} suffix="K+" label="USD Trading Fee Saved" />
+            <Stat end={12873} suffix="+" label="Happy Clients" />
+            <Stat end={1} suffix="M+" label="AI-Supported Trading Orders" />
           </div>
         </div>
       </section>
