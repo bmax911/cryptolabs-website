@@ -496,10 +496,9 @@ align-items: stretch;
 
 .charts-row {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 2.5rem;
   width: 100%;
-  align-items: stretch;
 }
 
 .dashboard-charts-block {
@@ -517,9 +516,8 @@ margin: 0 auto;
 box-sizing: border-box;
 }
 .chart-placeholder {
-flex: 1 1 0;
-min-width: 0;
-width: 0;
+flex: 1 1 45%; /* Allow grow/shrink with a basis of 45% for wrapping */
+min-width: 300px; /* Ensure a minimum width before wrapping */
 height: 52vh;
 max-height: 420px;
 background: rgba(0,255,255,0.06);
