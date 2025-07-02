@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { fetchWorldBankData } from './WorldBankChartUtils';
 
@@ -75,27 +73,29 @@ const DashboardCharts = () => {
           <input id="year-range-end" type="number" min={start} max={new Date().getFullYear()} value={end} onChange={e => setEnd(Number(e.target.value))} style={{ width: 70 }} aria-label="End year" />
         </div>
       </div>
-      <div className="chart-placeholder chart-large">
-        {loading ? 'Loading Line Chart...' : error ? error : (
-          <>
-            <LineChart data={lineData} indicator={lineIndicator} country={country} />
-            <div className="chart-alt-desc">
-              <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === lineIndicator)?.label} ({start}–{end}):</strong>
-              This line chart visualizes the selected indicator for the chosen country and year range, sourced from the World Bank. Each point represents the value for a given year.
-            </div>
-          </>
-        )}
-      </div>
-      <div className="chart-placeholder chart-large">
-        {loading ? 'Loading Bar Chart...' : error ? error : (
-          <>
-            <BarChart data={barData} indicator={barIndicator} country={country} />
-            <div className="chart-alt-desc">
-              <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === barIndicator)?.label} ({start}–{end}):</strong>
-              This bar chart shows the selected indicator for the chosen country and year range, as reported by the World Bank.
-            </div>
-          </>
-        )}
+      <div className="charts-row">
+        <div className="chart-placeholder chart-large">
+          {loading ? 'Loading Line Chart...' : error ? error : (
+            <>
+              <LineChart data={lineData} indicator={lineIndicator} country={country} />
+              <div className="chart-alt-desc">
+                <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === lineIndicator)?.label} ({start}–{end}):</strong>
+                This line chart visualizes the selected indicator for the chosen country and year range, sourced from the World Bank. Each point represents the value for a given year.
+              </div>
+            </>
+          )}
+        </div>
+        <div className="chart-placeholder chart-large">
+          {loading ? 'Loading Bar Chart...' : error ? error : (
+            <>
+              <BarChart data={barData} indicator={barIndicator} country={country} />
+              <div className="chart-alt-desc">
+                <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === barIndicator)?.label} ({start}–{end}):</strong>
+                This bar chart shows the selected indicator for the chosen country and year range, as reported by the World Bank.
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
