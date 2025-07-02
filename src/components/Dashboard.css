@@ -655,7 +655,7 @@ transition: color 0.2s;
 color: #00fff7;
 }
 
-.dashboard-table td.status-cell {
+.dashboard-table .status-cell {
   text-align: center;
 }
 
