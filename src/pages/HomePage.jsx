@@ -117,6 +117,65 @@ const HomePage = () => {
         </div>
       </section>
       
+      {/* STATS SECTION */}
+      <section id="stats" className="py-20 md:py-24 bg-light-bg dark:bg-dark-bg">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="p-8 scroll-animate">
+              <h3 className="text-4xl font-bold text-primary">500K+</h3>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">USD Trading Fee Saved</p>
+            </div>
+            <div className="p-8 scroll-animate">
+              <h3 className="text-4xl font-bold text-primary">12,873+</h3>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Happy Clients</p>
+            </div>
+            <div className="p-8 scroll-animate">
+              <h3 className="text-4xl font-bold text-primary">1M+</h3>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">AI-Supported Trading Orders</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* TESTIMONIALS SECTION */}
+      <section id="testimonials" className="py-20 md:py-32 bg-light-bg dark:bg-dark-surface">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-light-text dark:text-dark-text scroll-animate">What Our Clients Say</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Testimonial 1 */}
+            <div className="testimonial-card p-8 rounded-lg scroll-animate bg-white/5 dark:bg-dark-surface/50 backdrop-blur-sm border border-white/10 dark:border-gray-800/50">
+              <p className="text-gray-600 dark:text-gray-300 mb-6 italic">"CryptoLabs revolutionized my trading strategy. The AI analysis is a game-changer, and the cashback on fees is just the cherry on top. Highly recommended!"</p>
+              <div className="flex items-center">
+                <div>
+                  <p className="font-bold text-light-text dark:text-dark-text">Alex Johnson</p>
+                  <p className="text-sm text-primary">Pro Trader</p>
+                </div>
+              </div>
+            </div>
+            {/* Testimonial 2 */}
+            <div className="testimonial-card p-8 rounded-lg scroll-animate bg-white/5 dark:bg-dark-surface/50 backdrop-blur-sm border border-white/10 dark:border-gray-800/50" style={{transitionDelay: '150ms'}}>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 italic">"As someone new to crypto, the 1-Stop-Shop Planner was invaluable. It helped me organize my trades and stay on top of the market. The platform is incredibly user-friendly."</p>
+              <div className="flex items-center">
+                <div>
+                  <p className="font-bold text-light-text dark:text-dark-text">Samantha Lee</p>
+                  <p className="text-sm text-primary">Crypto Enthusiast</p>
+                </div>
+              </div>
+            </div>
+            {/* Testimonial 3 */}
+            <div className="testimonial-card p-8 rounded-lg scroll-animate bg-white/5 dark:bg-dark-surface/50 backdrop-blur-sm border border-white/10 dark:border-gray-800/50" style={{transitionDelay: '300ms'}}>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 italic">"The automated cashback system is seamless. I've saved a significant amount on trading fees without any extra effort. It's a must-have for any serious trader."</p>
+              <div className="flex items-center">
+                <div>
+                  <p className="font-bold text-light-text dark:text-dark-text">David Chen</p>
+                  <p className="text-sm text-primary">Financial Analyst</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* CTA SECTION */}
       <section id="cta" className="py-20 md:py-24 bg-light-bg dark:bg-dark-bg">
         <div className="container mx-auto px-6 text-center scroll-animate">
