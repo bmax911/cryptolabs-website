@@ -640,6 +640,13 @@ border-collapse: collapse;
 color: #b5eaff;
 font-family: 'Montserrat', Arial, sans-serif;
 }
+.dashboard-table th,
+.dashboard-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
 .dashboard-table th {
 cursor: pointer;
 transition: color 0.2s;
