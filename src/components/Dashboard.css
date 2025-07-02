@@ -654,6 +654,11 @@ transition: color 0.2s;
 .dashboard-table th:hover {
 color: #00fff7;
 }
+
+.dashboard-table td.status-cell {
+  text-align: center;
+}
+
 .status-pill {
 padding: 0.3rem 0.7rem;
 border-radius: 9999px;
