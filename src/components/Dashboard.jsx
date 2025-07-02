@@ -5,6 +5,7 @@ import './Dashboard.css'; // Import the new CSS
 import Header from './Header'; // Assuming you have a Header component
 import Footer from './Footer'; // Assuming you have a Footer component
 import { useAuth } from '../contexts/AuthContext';
+import labIcon from '../../lab-icon.svg';
 
 const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
 
@@ -66,7 +67,7 @@ const Dashboard = () => {
       {/* Weather Decoration */}
       {showWeather && weather && (
         <div className="weather-decoration">
-          <img src={require('../../lab-icon.svg').default} alt="Logo" className="weather-animated-icon" />
+          <img src={labIcon} alt="Logo" className="weather-animated-icon" />
           <div className="weather-info">
             <span>{weather.current.temp_c}°C</span>
             <span>{weather.current.condition.text}</span>
@@ -77,7 +78,7 @@ const Dashboard = () => {
       <main className="dashboard-main">
         <aside className="dashboard-sidebar">
           <div className="sidebar-logo">
-            <img src={require('../../lab-icon.svg').default} alt="Logo" width={54} />
+            <img src={labIcon} alt="Logo" width={54} />
           </div>
           <ul className="sidebar-menu">
             <li>Home</li>
