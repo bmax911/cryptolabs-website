@@ -568,6 +568,93 @@ body, .dashboard-container {
   box-shadow: 0 0 6px #00e6d6;
 }
 
+/* === Cashback Popup Form === */
+.cashback-popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cashback-popup {
+  background: #18223a;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px 0 rgba(0,255,255,0.18);
+  padding: 2.2rem 2rem 1.5rem 2rem;
+  min-width: 320px;
+  max-width: 95vw;
+  position: relative;
+  color: #fff;
+  animation: fadeIn 0.3s;
+}
+.popup-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #00e6d6;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.popup-group {
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+.popup-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #b5eaff;
+}
+.popup-group input,
+.popup-group textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 0.6rem;
+  border: 1px solid #00e6d6;
+  background: rgba(30,41,59,0.85);
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.2rem;
+  box-sizing: border-box;
+  transition: border 0.2s;
+}
+.popup-group input:focus,
+.popup-group textarea:focus {
+  outline: none;
+  border-color: #00fff7;
+}
+.popup-submit {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: #00e6d6;
+  color: #0f172a;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+.popup-submit:hover:not(:disabled) {
+  background: #00fff7;
+}
+.popup-success {
+  color: #22c55e;
+  margin-bottom: 0.7rem;
+  font-weight: 600;
+}
+.popup-error {
+  color: #ef4444;
+  margin-bottom: 0.7rem;
+  font-weight: 600;
+}
+
 /* === Responsive Modern Layout === */
 @media (max-width: 1200px) {
   .dashboard-content-area {
