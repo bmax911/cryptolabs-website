@@ -566,6 +566,8 @@ box-sizing: border-box;
   font-size: 1.5rem;
   font-weight: 700;
 }
+
+/*
 .table-filter {
   padding: 0.5rem 0.8rem;
   border-radius: 0.7rem;
@@ -575,6 +577,8 @@ box-sizing: border-box;
   font-size: 1rem;
   transition: border 0.2s;
 }
+*/
+
 .table-filter:focus {
   outline: none;
   border-color: #00fff7;
