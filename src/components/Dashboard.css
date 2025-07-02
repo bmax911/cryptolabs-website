@@ -518,8 +518,8 @@ box-sizing: border-box;
 .chart-placeholder {
 flex: 1 1 45%; /* Allow grow/shrink with a basis of 45% for wrapping */
 min-width: 300px; /* Ensure a minimum width before wrapping */
-height: 52vh;
-max-height: 420px;
+height: 65vh; /* Increased height for more vertical space */
+max-height: 600px; /* Increased max-height */
 background: rgba(0,255,255,0.06);
 border-radius: 1.2rem;
 display: flex;
@@ -535,7 +535,7 @@ margin-right: 0;
 margin-left: 0;
 padding: 1.2rem 0.5rem 1.2rem 0.5rem;
 box-sizing: border-box;
-overflow: hidden;
+overflow: auto; /* Changed from hidden to auto to allow scrolling */
 }
 .dashboard-table {
 background: rgba(0,255,255,0.06);
