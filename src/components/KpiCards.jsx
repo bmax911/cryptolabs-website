@@ -1,18 +1,19 @@
-
 import React, { useState } from 'react';
 import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot } from 'react-icons/fa';
+import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 
 const kpis = [
   { icon: <FaMoneyBillWave />, label: 'Trading Fee Cashback', color: 'primary' },
-  { icon: <FaUserFriends />, label: 'Referral', value: '8', color: 'accent' },
-  { icon: <FaUser />, label: 'Profile', value: 'Verified', color: 'neutral' },
-  { icon: <FaChartLine />, label: 'Research Analysis', value: '5 Reports', color: 'accent' },
+  { icon: <FaUserFriends />, label: 'Referral', color: 'accent' },
+  { icon: <FaUser />, label: 'Profile', color: 'neutral' },
+  { icon: <FaChartLine />, label: 'Research Analysis', color: 'accent' },
   { icon: <FaRobot />, label: 'AI Assistant', value: 'Active', color: 'primary' },
 ];
 
 const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
 
 const KpiCards = () => {
+  const { isAuthenticated, token } = useAuth(); // Get auth state
   const [showPopup, setShowPopup] = useState(false);
   const [exchange, setExchange] = useState('');
   const [email, setEmail] = useState('');
@@ -20,6 +21,17 @@ const KpiCards = () => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+
+  const handleResearchAnalysisClick = () => {
+    if (isAuthenticated()) {
+      // Append the token to the Heroku app URL
+      const urlWithToken = `${HEROKU_APP_URL}?token=${token}`;
+      window.open(urlWithToken, '_blank', 'noopener');
+    } else {
+      // Notify the user that they need to be logged in
+      alert('You need to be logged in to access the Research Analysis app.');
+    }
+  };
 
   const handleCashbackClick = () => setShowPopup(true);
   const handlePopupClose = () => {
@@ -68,9 +80,8 @@ const KpiCards = () => {
         <span className="kpi-value">Verified</span>
         <span className="kpi-label">Profile</span>
       </div>
-      <div className="kpi-card kpi-accent" style={{ cursor: 'pointer' }} onClick={() => window.open(HEROKU_APP_URL, '_blank', 'noopener') }>
+      <div className="kpi-card kpi-accent" style={{ cursor: 'pointer' }} onClick={handleResearchAnalysisClick}>
         <span className="kpi-icon"><FaChartLine /></span>
-        <span className="kpi-value">5 Reports</span>
         <span className="kpi-label">Research Analysis</span>
       </div>
       <div className="kpi-card kpi-primary">
