@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
                 const decoded = jwtDecode(token);
                 // Check if token is expired
                 if (decoded.exp * 1000 > Date.now()) {
-                    setUser({ email: decoded.email, name: decoded.name });
+                    setUser({ email: decoded.email, name: decoded.name, userId: decoded.sub });
                 } else {
                     // Token is expired
                     logout();

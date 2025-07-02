@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios
 import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 
@@ -21,15 +22,35 @@ const KpiCards = () => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [isGeneratingToken, setIsGeneratingToken] = useState(false); // New state for loading
 
-  const handleResearchAnalysisClick = () => {
-    if (isAuthenticated()) {
-      // Append the token to the Heroku app URL
-      const urlWithToken = `${HEROKU_APP_URL}?token=${token}`;
-      window.open(urlWithToken, '_blank', 'noopener');
-    } else {
-      // Notify the user that they need to be logged in
+  const handleResearchAnalysisClick = async () => {
+    if (!isAuthenticated()) {
       alert('You need to be logged in to access the Research Analysis app.');
+      return;
+    }
+
+    setIsGeneratingToken(true);
+    try {
+      // Make a request to your backend to get a temporary token
+      const response = await axios.post('https://cryptolabs.icu/api/auth/validate-and-generate', {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const { temp_token } = response.data;
+      if (temp_token) {
+        const urlWithToken = `${HEROKU_APP_URL}?token=${temp_token}`;
+        window.open(urlWithToken, '_blank', 'noopener,noreferrer');
+      } else {
+        throw new Error('Temporary token not received');
+      }
+    } catch (err) {
+      console.error('Error generating temporary token:', err);
+      alert('Failed to access Research Analysis. Please try again later.');
+    } finally {
+      setIsGeneratingToken(false);
     }
   };
 
@@ -83,7 +104,7 @@ const KpiCards = () => {
       </div>
       <div className="kpi-card kpi-accent" style={{ cursor: 'pointer' }} onClick={handleResearchAnalysisClick}>
         <span className="kpi-icon"><FaChartLine /></span>
-        <span className="kpi-value">Tools</span>
+        <span className="kpi-value">{isGeneratingToken ? 'Loading...' : 'Tools'}</span>
         <span className="kpi-label">Research Analysis</span>
       </div>
       <div className="kpi-card kpi-primary">
