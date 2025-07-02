@@ -350,20 +350,23 @@ background: transparent;
 display: flex;
 align-items: center;
 justify-content: space-between;
-padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+padding: 1rem 2rem;
 background: rgba(17, 24, 39, 0.92);
 box-shadow: 0 2px 16px 0 rgba(0,255,255,0.08);
-border-bottom-left-radius: 2rem;
-border-bottom-right-radius: 2rem;
-margin-bottom: 1.5rem;
+border-bottom: 1px solid rgba(0, 255, 255, 0.1);
 position: sticky;
 top: 0;
 z-index: 9;
 }
+.topnav-left, .topnav-right {
+display: flex;
+align-items: center;
+gap: 1rem;
+}
 .topnav-logo {
 width: 38px;
 height: 38px;
-margin-right: 1rem;
+margin-right: 0.5rem;
 filter: drop-shadow(0 0 8px #00fff7);
 }
 .topnav-title {
@@ -372,10 +375,25 @@ font-size: 1.3rem;
 font-weight: 700;
 letter-spacing: 0.04em;
 }
+.topnav-user-container {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+background: rgba(0,255,255,0.08);
+padding: 0.4rem 0.8rem;
+border-radius: 1rem;
+transition: background 0.2s;
+}
+.topnav-user-container:hover {
+background: rgba(0,255,255,0.18);
+}
+.topnav-user-icon {
+color: #00e6d6;
+}
 .topnav-user {
 color: #b5eaff;
-margin-left: 1.2rem;
-font-size: 1.1rem;
+font-size: 0.95rem;
+font-weight: 500;
 }
 .topnav-notification {
 margin-left: 1.2rem;
