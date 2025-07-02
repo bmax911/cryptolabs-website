@@ -542,17 +542,21 @@ max-width: 2000px;
 box-sizing: border-box;
 }
 .chart-controls {
-display: flex;
-flex-wrap: wrap;
-gap: 2rem;
-margin-bottom: 0;
-align-items: center;
-justify-content: flex-start;
-padding: 1.5rem 2rem;
-border-radius: 1.2rem;
-background: rgba(30, 41, 59, 0.82);
-box-shadow: 0 4px 24px 0 rgba(0,255,255,0.12);
-backdrop-filter: blur(12px) saturate(120%);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-bottom: 0;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 2000px;
+  box-sizing: border-box;
+  padding: 1.5rem 2rem;
+  border-radius: 1.2rem;
+  background: rgba(30, 41, 59, 0.82);
+  box-shadow: 0 4px 24px 0 rgba(0,255,255,0.12);
+  backdrop-filter: blur(12px) saturate(120%);
 }
 .glassmorphism-card {
 background: rgba(30, 41, 59, 0.82);
