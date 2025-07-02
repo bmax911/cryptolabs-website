@@ -551,6 +551,44 @@ align-items: stretch;
   align-items: center;
   justify-content: center;
 }
+
+.chart-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chart-controls label {
+  color: #00e6d6;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.chart-controls select,
+.chart-controls input {
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.7rem;
+  border: 1.5px solid #00e6d6;
+  background: rgba(17, 24, 39, 0.92);
+  color: #fff;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.chart-controls select:focus,
+.chart-controls input:focus {
+  outline: none;
+  border-color: #00fff7;
+  box-shadow: 0 0 8px #00fff7;
+}
+
+.chart-controls span {
+  color: #b5eaff;
+  font-size: 1.2rem;
+  align-self: flex-end;
+}
+
 .dashboard-table {
   background: rgba(0,255,255,0.06);
   border-radius: 1.2rem;
