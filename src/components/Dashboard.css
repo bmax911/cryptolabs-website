@@ -506,12 +506,13 @@ body, .dashboard-container {
 
 .dashboard-charts {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
   gap: 2.5rem;
   margin-bottom: 0;
   width: 100%;
   max-width: 2000px;
   box-sizing: border-box;
+  align-items: stretch;
 }
 .dashboard-charts-large {
   width: 100%;
@@ -519,10 +520,11 @@ body, .dashboard-container {
   box-sizing: border-box;
 }
 .chart-placeholder {
-  flex: 1 1 420px;
-  min-width: 320px;
-  max-width: 100%;
-  min-height: 320px;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 0;
+  height: 48vh;
+  max-height: 420px;
   background: rgba(0,255,255,0.06);
   border-radius: 1.2rem;
   display: flex;
@@ -538,6 +540,7 @@ body, .dashboard-container {
   margin-left: 0;
   padding: 1.2rem 0.5rem 1.2rem 0.5rem;
   box-sizing: border-box;
+  overflow: hidden;
 }
 .dashboard-table {
   background: rgba(0,255,255,0.06);
@@ -767,7 +770,8 @@ body, .dashboard-container {
   .chart-placeholder {
     min-width: 0;
     width: 100%;
-    min-height: 220px;
+    height: 38vh;
+    max-height: 320px;
     padding: 1rem 0.2rem 1rem 0.2rem;
   }
   .dashboard-table {
