@@ -68,11 +68,12 @@ const KpiCards = () => {
     <div className="kpi-cards-row">
       <div className="kpi-card kpi-primary" style={{ cursor: 'pointer' }} onClick={handleCashbackClick}>
         <span className="kpi-icon"><FaMoneyBillWave /></span>
+        <span className="kpi-value">Contact Us</span>
         <span className="kpi-label">Trading Fee Cashback</span>
       </div>
       <div className="kpi-card kpi-accent">
         <span className="kpi-icon"><FaUserFriends /></span>
-        <span className="kpi-value">8</span>
+        <span className="kpi-value">0</span>
         <span className="kpi-label">Referral</span>
       </div>
       <div className="kpi-card kpi-neutral">
@@ -82,6 +83,7 @@ const KpiCards = () => {
       </div>
       <div className="kpi-card kpi-accent" style={{ cursor: 'pointer' }} onClick={handleResearchAnalysisClick}>
         <span className="kpi-icon"><FaChartLine /></span>
+        <span className="kpi-value">Tools</span>
         <span className="kpi-label">Research Analysis</span>
       </div>
       <div className="kpi-card kpi-primary">
