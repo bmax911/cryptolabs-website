@@ -275,7 +275,7 @@ margin: 0.5rem 0;
 /* === Dashboard Modern Layout === */
 .dashboard-root {
 display: flex;
-min-height: 100vh;
+min-height: 200vh;
 width: 100vw;
 background: #0f172a;
 position: relative;
