@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchWorldBankData } from './WorldBankChartUtils';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const INDICATORS = [
   { value: 'NY.GDP.MKTP.CD', label: 'GDP (current US$)' },
@@ -77,7 +78,7 @@ const DashboardCharts = () => {
         <div className="chart-placeholder chart-large">
           {loading ? 'Loading Line Chart...' : error ? error : (
             <>
-              <LineChart data={lineData} indicator={lineIndicator} country={country} />
+              <RechartsLineChart data={lineData} indicator={lineIndicator} />
               <div className="chart-alt-desc">
                 <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === lineIndicator)?.label} ({start}–{end}):</strong>
                 This line chart visualizes the selected indicator for the chosen country and year range, sourced from the World Bank. Each point represents the value for a given year.
@@ -88,7 +89,7 @@ const DashboardCharts = () => {
         <div className="chart-placeholder chart-large">
           {loading ? 'Loading Bar Chart...' : error ? error : (
             <>
-              <BarChart data={barData} indicator={barIndicator} country={country} />
+              <RechartsBarChart data={barData} indicator={barIndicator} />
               <div className="chart-alt-desc">
                 <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === barIndicator)?.label} ({start}–{end}):</strong>
                 This bar chart shows the selected indicator for the chosen country and year range, as reported by the World Bank.
@@ -101,72 +102,49 @@ const DashboardCharts = () => {
   );
 };
 
-function LineChart({ data }) {
-  if (!data.length) return <span>No data</span>;
-  // Responsive SVG line chart (wider on large screens)
-  const w = window.innerWidth > 1200 ? 900 : 600, h = 340, pad = 64;
-  const years = data.map(d => d.year);
-  const values = data.map(d => d.value);
-  const min = Math.min(...values), max = Math.max(...values);
-  const points = values.map((v, i) => {
-    const x = pad + (i * (w - 2 * pad)) / (values.length - 1);
-    const y = h - pad - ((v - min) / (max - min)) * (h - 2 * pad);
-    return `${x},${y}`;
-  }).join(' ');
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip" style={{ backgroundColor: 'rgba(30, 41, 59, 0.9)', padding: '10px', border: '1px solid #00e6d6', borderRadius: '5px' }}>
+        <p className="label">{`Year: ${label}`}</p>
+        <p className="intro">{`Value: ${payload[0].value.toLocaleString()}`}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+function RechartsLineChart({ data, indicator }) {
+  if (!data || data.length === 0) return <span>No data available for the selected criteria.</span>;
+
   return (
-    <svg width={w} height={h} aria-label="Line chart visualization">
-      {/* Axes */}
-      <line x1={pad} y1={h - pad} x2={w - pad} y2={h - pad} stroke="#b5eaff" strokeWidth="1.5" />
-      <line x1={pad} y1={pad} x2={pad} y2={h - pad} stroke="#b5eaff" strokeWidth="1.5" />
-      {/* Line */}
-      <polyline fill="none" stroke="#00e6d6" strokeWidth="4" points={points} />
-      {/* Dots */}
-      {values.map((v, i) => {
-        const x = pad + (i * (w - 2 * pad)) / (values.length - 1);
-        const y = h - pad - ((v - min) / (max - min)) * (h - 2 * pad);
-        return <circle key={i} cx={x} cy={y} r={7} fill="#00e6d6" stroke="#fff" strokeWidth="2" />;
-      })}
-      {/* Year labels */}
-      {years.map((year, i) => (
-        <text key={year} x={pad + (i * (w - 2 * pad)) / (years.length - 1)} y={h - 24} fontSize="17" textAnchor="middle" fill="#b5eaff">{year}</text>
-      ))}
-      {/* Value labels (min/max) */}
-      <text x={pad - 16} y={h - pad} fontSize="15" textAnchor="end" fill="#b5eaff">{min.toLocaleString()}</text>
-      <text x={pad - 16} y={pad + 8} fontSize="15" textAnchor="end" fill="#b5eaff">{max.toLocaleString()}</text>
-    </svg>
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={data} margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(0, 255, 255, 0.2)" />
+        <XAxis dataKey="year" stroke="#b5eaff" />
+        <YAxis stroke="#b5eaff" tickFormatter={(value) => new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(value)} />
+        <Tooltip content={<CustomTooltip />} />
+        <Legend wrapperStyle={{ color: '#fff' }} />
+        <Line type="monotone" dataKey="value" name={INDICATORS.find(i => i.value === indicator)?.label || 'Value'} stroke="#00e6d6" strokeWidth={2} activeDot={{ r: 8 }} />
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 
-function BarChart({ data }) {
-  if (!data.length) return <span>No data</span>;
-  // Responsive SVG bar chart (wider on large screens)
-  const w = window.innerWidth > 1200 ? 900 : 600, h = 340, pad = 64;
-  const years = data.map(d => d.year);
-  const values = data.map(d => d.value);
-  const min = Math.min(...values), max = Math.max(...values);
-  const barW = (w - 2 * pad) / values.length - 8;
+function RechartsBarChart({ data, indicator }) {
+  if (!data || data.length === 0) return <span>No data available for the selected criteria.</span>;
+
   return (
-    <svg width={w} height={h} aria-label="Bar chart visualization">
-      {/* Axes */}
-      <line x1={pad} y1={h - pad} x2={w - pad} y2={h - pad} stroke="#b5eaff" strokeWidth="1.5" />
-      <line x1={pad} y1={pad} x2={pad} y2={h - pad} stroke="#b5eaff" strokeWidth="1.5" />
-      {/* Bars */}
-      {values.map((v, i) => {
-        const x = pad + i * ((w - 2 * pad) / values.length);
-        const y = h - pad - ((v - min) / (max - min)) * (h - 2 * pad);
-        const barH = ((v - min) / (max - min)) * (h - 2 * pad);
-        return (
-          <g key={years[i]}>
-            <rect x={x} y={y} width={barW} height={barH} fill="#00e6d6" rx="7" />
-            <text x={x + barW / 2} y={h - 24} fontSize="17" textAnchor="middle" fill="#b5eaff">{years[i]}</text>
-            <text x={x + barW / 2} y={y - 12} fontSize="15" textAnchor="middle" fill="#fff">{Math.round(v).toLocaleString()}</text>
-          </g>
-        );
-      })}
-      {/* Value labels (min/max) */}
-      <text x={pad - 16} y={h - pad} fontSize="15" textAnchor="end" fill="#b5eaff">{min.toLocaleString()}</text>
-      <text x={pad - 16} y={pad + 8} fontSize="15" textAnchor="end" fill="#b5eaff">{max.toLocaleString()}</text>
-    </svg>
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={data} margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(0, 255, 255, 0.2)" />
+        <XAxis dataKey="year" stroke="#b5eaff" />
+        <YAxis stroke="#b5eaff" tickFormatter={(value) => new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(value)} />
+        <Tooltip content={<CustomTooltip />} />
+        <Legend wrapperStyle={{ color: '#fff' }} />
+        <Bar dataKey="value" name={INDICATORS.find(i => i.value === indicator)?.label || 'Value'} fill="#00e6d6" />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
 
