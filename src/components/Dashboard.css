@@ -283,51 +283,281 @@ body, .dashboard-container {
   100% { background-position: -200% 0; }
 }
 
-/* === Responsive Layout === */
-.dashboard-main {
+/* === Dashboard Modern Layout === */
+.dashboard-root {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  min-height: 100vh;
+  width: 100vw;
+  background: #0f172a;
   position: relative;
-  z-index: 1;
 }
-.dashboard-content {
-  flex: 1;
-  min-width: 0;
+
+.sidebar-menu-fixed {
+  width: 64px;
+  min-width: 64px;
+  background: rgba(17, 24, 39, 0.92);
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1.5rem 0;
+  gap: 2rem;
+  box-shadow: 2px 0 16px 0 rgba(0,255,255,0.08);
+  z-index: 10;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+.sidebar-menu-fixed ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.sidebar-menu-fixed li {
+  color: #b5eaff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.sidebar-menu-fixed li:hover, .sidebar-menu-fixed .logout-link:hover {
+  background: rgba(0,255,255,0.12);
+  color: #00fff7;
+  box-shadow: 0 0 8px #00fff7;
+}
+.logout-link {
+  color: #ff6b81 !important;
+  font-weight: 600;
+}
+
+.dashboard-mainarea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: transparent;
+}
+
+.topnav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+  background: rgba(17, 24, 39, 0.92);
+  box-shadow: 0 2px 16px 0 rgba(0,255,255,0.08);
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  margin-bottom: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 9;
+}
+.topnav-logo {
+  width: 38px;
+  height: 38px;
+  margin-right: 1rem;
+  filter: drop-shadow(0 0 8px #00fff7);
+}
+.topnav-title {
+  color: #00fff7;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.topnav-user {
+  color: #b5eaff;
+  margin-left: 1.2rem;
+  font-size: 1.1rem;
+}
+.topnav-notification {
+  margin-left: 1.2rem;
+  font-size: 1.3rem;
+  color: #00fff7;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.topnav-notification:hover {
+  color: #fff;
+}
+
+.dashboard-content-area {
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+.dashboard-header-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-cards-row {
+  display: flex;
+  gap: 1.5rem;
+}
+.kpi-card {
+  background: rgba(0,255,255,0.08);
+  border-radius: 1.2rem;
+  box-shadow: 0 0 12px #00fff733;
+  padding: 1.1rem 1.5rem;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+.kpi-card:hover {
+  background: #00fff7;
+  color: #0f172a;
+  box-shadow: 0 0 24px #00fff7;
+}
+.kpi-icon {
+  font-size: 1.7rem;
+  margin-bottom: 0.3rem;
+  color: #00fff7;
+  animation: crypto-pop 1.2s infinite alternate;
+}
+.kpi-value {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 8px #00fff7;
+}
+.kpi-label {
+  font-size: 0.95rem;
+  color: #b5eaff;
+  margin-top: 0.2rem;
+}
+
+.weather-widget {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 41, 59, 0.82);
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px 0 rgba(0,255,255,0.18);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  position: relative;
+}
+.weather-widget-icon {
+  width: 38px;
+  height: 38px;
+  filter: drop-shadow(0 0 8px #00fff7);
+  animation: weather-bounce 2.2s infinite alternate;
+}
+
+.notification-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.notification {
+  background: rgba(0,255,255,0.08);
+  color: #00fff7;
+  border-radius: 0.7rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  box-shadow: 0 0 8px #00fff7;
+  transition: background 0.2s, color 0.2s;
+}
+.notification-success { color: #22c55e; }
+.notification-error { color: #ef4444; }
+.notification-info { color: #00fff7; }
+
+.dashboard-charts {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.chart-placeholder {
+  flex: 1;
+  min-height: 180px;
+  background: rgba(0,255,255,0.06);
+  border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b5eaff;
+  font-size: 1.1rem;
+  box-shadow: 0 0 8px #00fff7;
+}
+
+.dashboard-table {
+  background: rgba(0,255,255,0.06);
+  border-radius: 1.2rem;
+  box-shadow: 0 0 8px #00fff7;
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+.dashboard-table table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #b5eaff;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+.dashboard-table th, .dashboard-table td {
+  padding: 0.7rem 1.2rem;
+  text-align: left;
+}
+.dashboard-table th {
+  color: #00fff7;
+  font-weight: 600;
+  border-bottom: 2px solid #00fff7;
+}
+.dashboard-table tr:nth-child(even) {
+  background: rgba(0,255,255,0.03);
+}
+
+/* === Responsive Modern Layout === */
+@media (max-width: 1200px) {
+  .dashboard-content-area {
+    padding: 1rem 0.5rem 1.5rem 0.5rem;
+  }
+  .topnav-bar {
+    padding: 1rem 1rem 1rem 1rem;
+  }
 }
 @media (max-width: 900px) {
-  .dashboard-main {
+  .dashboard-root {
     flex-direction: column;
-    align-items: stretch;
   }
-  .dashboard-sidebar {
+  .sidebar-menu-fixed {
     flex-direction: row;
-    justify-content: center;
-    margin: 0 0 2rem 0;
+    width: 100vw;
     min-width: 0;
-    width: 100%;
-    border-radius: 1.5rem;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow: 0 2px 16px 0 rgba(0,255,255,0.08);
+    padding: 1rem 0;
+    gap: 1.5rem;
+  }
+  .dashboard-mainarea {
+    padding-top: 0;
   }
 }
 @media (max-width: 600px) {
-  .dashboard-card {
-    padding: 1.2rem 0.5rem;
-    max-width: 98vw;
+  .dashboard-header-row, .dashboard-charts {
+    flex-direction: column;
+    gap: 1rem;
   }
-  .dashboard-sidebar {
-    padding: 1.2rem 0.5rem;
-    border-radius: 1rem;
+  .kpi-cards-row {
+    flex-direction: column;
+    gap: 1rem;
   }
-  .weather-decoration {
-    top: 0.7rem;
-    right: 0.7rem;
-    padding: 0.3rem 0.7rem 0.3rem 0.3rem;
+  .dashboard-table th, .dashboard-table td {
+    padding: 0.5rem 0.5rem;
   }
 }
