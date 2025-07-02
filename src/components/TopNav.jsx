@@ -1,6 +1,7 @@
 import React from 'react';
 import ThemeToggleButton from './ThemeToggleButton';
 import labIcon from '../../lab-icon.svg';
+import { FaUser } from 'react-icons/fa';
 
 const TopNav = ({ user }) => (
   <nav className="topnav-bar">
@@ -13,7 +14,10 @@ const TopNav = ({ user }) => (
     </div>
     <div className="topnav-right">
       <ThemeToggleButton />
-      <span className="topnav-user">{user?.username || 'User'}</span>
+      <div className="topnav-user-container">
+        <FaUser className="topnav-user-icon" />
+        <span className="topnav-user">{user?.email || 'User'}</span>
+      </div>
       {/* Notification bell icon placeholder */}
       <span className="topnav-notification" title="Notifications">🔔</span>
     </div>
