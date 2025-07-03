@@ -20,35 +20,68 @@ const KpiCards = () => {
   const [isGeneratingToken, setIsGeneratingToken] = useState(false); // New state for loading
 
   const handleResearchAnalysisClick = async () => {
+    console.log('Research Analysis clicked');
+    console.log('isAuthenticated:', isAuthenticated());
+    console.log('token:', token ? 'exists' : 'missing');
+    
     if (!isAuthenticated()) {
       alert('You need to be logged in to access the Research Analysis app.');
       return;
     }
 
-    if (!token) {
+    if (!token || token.trim() === '') {
+        console.error('Token is missing or empty:', token);
         alert('Authentication token is missing. Please log in again.');
         return;
     }
 
     setIsGeneratingToken(true);
+    console.log('Making request to backend...');
+    
     try {
-      // Make a request to your backend to get a temporary token
+      // Add timeout to the request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const response = await axios.post('https://www.cryptolabs.cfd/api/auth/validate-and-generate', {}, {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        signal: controller.signal,
+        timeout: 10000
       });
+      
+      clearTimeout(timeoutId);
+      console.log('Backend response:', response.data);
 
       const { temp_token } = response.data;
       if (temp_token) {
+        console.log('Opening Heroku app with token...');
         const urlWithToken = `${HEROKU_APP_URL}?token=${temp_token}`;
         window.open(urlWithToken, '_blank', 'noopener,noreferrer');
       } else {
-        throw new Error('Temporary token not received');
+        throw new Error('Temporary token not received from backend');
       }
     } catch (err) {
-      console.error('Error generating temporary token:', err);
-      alert('Failed to access Research Analysis. Please try again later.');
+      console.error('Full error object:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      
+      let errorMessage = 'Failed to access Research Analysis. ';
+      if (err.code === 'ECONNABORTED' || err.name === 'AbortError') {
+        errorMessage += 'Request timed out. Please check your connection.';
+      } else if (err.response?.status === 401) {
+        errorMessage += 'Authentication failed. Please log in again.';
+      } else if (err.response?.status === 403) {
+        errorMessage += 'Access denied. Please check your permissions.';
+      } else if (err.response?.data?.message) {
+        errorMessage += err.response.data.message;
+      } else {
+        errorMessage += 'Please try again later.';
+      }
+      
+      alert(errorMessage);
     } finally {
       setIsGeneratingToken(false);
     }
