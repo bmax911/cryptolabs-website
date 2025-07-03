@@ -76,21 +76,6 @@ const LoginPage = () => {
           </button>
         </div>
 
-        {/* Debug information - remove in production */}
-        <div style={{ 
-          fontSize: '12px', 
-          color: '#666', 
-          marginTop: '20px',
-          padding: '10px',
-          backgroundColor: '#f5f5f5',
-          borderRadius: '5px'
-        }}>
-          <strong>Debug Info:</strong><br />
-          Netlify Identity Available: {window.netlifyIdentity ? 'Yes' : 'No'}<br />
-          Current User: {user ? 'Logged in' : 'Not logged in'}<br />
-          Is Authenticated: {isAuthenticated() ? 'Yes' : 'No'}
-        </div>
-
         <div className="signup-link-container">
           <p>
             Don't have an account?{' '}
