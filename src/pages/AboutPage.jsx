@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -21,7 +22,7 @@ import {
 // Animated counter component
 const AnimatedCounter = ({ from, to, duration = 2 }) => {
   const [count, setCount] = useState(from);
-  const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true });
+  const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
 
   useEffect(() => {
     if (inView) {
@@ -44,7 +45,7 @@ const AnimatedCounter = ({ from, to, duration = 2 }) => {
 
 // Animated text reveal component
 const AnimatedText = ({ children, delay = 0 }) => {
-  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   
   return (
     <motion.div
@@ -60,7 +61,7 @@ const AnimatedText = ({ children, delay = 0 }) => {
 
 // Service card component
 const ServiceCard = ({ icon, title, description, delay = 0, partners = [] }) => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
   
   return (
     <motion.div
@@ -102,7 +103,7 @@ const ServiceCard = ({ icon, title, description, delay = 0, partners = [] }) => 
 
 // Honor card component
 const HonorCard = ({ title, description, icon, delay = 0 }) => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
   
   return (
     <motion.div
