@@ -32,35 +32,6 @@
   margin-bottom: 30px;
 }
 
-.input-group {
-  margin-bottom: 20px;
-  text-align: left;
-  display: none !important; /* Remove manual login fields */
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #555;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box; /* Important for padding */
-  transition: border-color 0.3s;
-}
-
-.input-group input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-}
-
 .login-button {
   width: 100%;
   padding: 15px;
@@ -72,7 +43,6 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
-  display: none !important; /* Hide login button */
 }
 
 .login-button:hover:not(:disabled) {
