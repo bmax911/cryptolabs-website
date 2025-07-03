@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios'; // Import axios
 import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext'; // Import useAuth
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const kpis = [
   { icon: <FaMoneyBillWave />, label: 'Trading Fee Cashback', color: 'primary' },
@@ -15,13 +16,7 @@ const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
 
 const KpiCards = () => {
   const { isAuthenticated, token } = useAuth(); // Get auth state
-  const [showPopup, setShowPopup] = useState(false);
-  const [exchange, setExchange] = useState('');
-  const [email, setEmail] = useState('');
-  const [desc, setDesc] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
+  const navigate = useNavigate(); // Get navigate function
   const [isGeneratingToken, setIsGeneratingToken] = useState(false); // New state for loading
 
   const handleResearchAnalysisClick = async () => {
@@ -54,35 +49,8 @@ const KpiCards = () => {
     }
   };
 
-  const handleCashbackClick = () => setShowPopup(true);
-  const handlePopupClose = () => {
-    setShowPopup(false);
-    setExchange('');
-    setEmail('');
-    setDesc('');
-    setSuccess('');
-    setError('');
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setSuccess('');
-    setError('');
-    try {
-      const res = await fetch('https://n8n.zephyrboost.com/webhook/cashback-request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ exchange, email, desc }),
-      });
-      if (!res.ok) throw new Error('Failed to submit request');
-      setSuccess('Request submitted! We will review your eligibility.');
-      setExchange(''); setEmail(''); setDesc('');
-    } catch (err) {
-      setError('Submission failed. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
+  const handleCashbackClick = () => {
+    navigate('/cashback-program');
   };
 
   return (
@@ -113,32 +81,6 @@ const KpiCards = () => {
         <span className="kpi-label">AI Assistant</span>
       </div>
 
-      {showPopup && (
-        <div className="cashback-popup-overlay" onClick={handlePopupClose}>
-          <div className="cashback-popup" onClick={e => e.stopPropagation()}>
-            <button className="popup-close" onClick={handlePopupClose}>&times;</button>
-            <h3>Join Trading Fee Cashback Program</h3>
-            <p>Only available for <b>new sign up users</b> on supported crypto exchanges. Please fill in your details:</p>
-            <form onSubmit={handleSubmit}>
-              <div className="popup-group">
-                <label>Crypto Exchange Name</label>
-                <input type="text" value={exchange} onChange={e => setExchange(e.target.value)} required placeholder="e.g. Binance" />
-              </div>
-              <div className="popup-group">
-                <label>Your Email</label>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
-              </div>
-              <div className="popup-group">
-                <label>Description</label>
-                <textarea value={desc} onChange={e => setDesc(e.target.value)} required placeholder="Explain why you want to join the cashback program..." />
-              </div>
-              {success && <div className="popup-success">{success}</div>}
-              {error && <div className="popup-error">{error}</div>}
-              <button type="submit" className="popup-submit" disabled={submitting}>{submitting ? 'Submitting...' : 'Submit'}</button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

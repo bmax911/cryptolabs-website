@@ -13,6 +13,7 @@ import LoginPage from './components/LoginPage'; // Assuming you have a login pag
 import Dashboard from './components/Dashboard'; // Your main app dashboard
 import NewsRedirect from './components/NewsRedirect'; // Import the new component
 import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
+import CashbackProgram from './components/CashbackProgram'; // Import the CashbackProgram component
 
 function App() {
   useEffect(() => {
@@ -63,6 +64,7 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />
           <Route path="/disclaimer" element={<DisclaimerPage />} />
+          <Route path="/cashback-program" element={<CashbackProgram />} />
           <Route 
             path="/dashboard" 
             element={
