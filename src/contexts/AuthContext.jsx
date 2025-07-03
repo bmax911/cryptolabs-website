@@ -1,47 +1,65 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import netlifyIdentity from 'netlify-identity-widget';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(() => localStorage.getItem('authToken'));
+    const [user, setUser] = useState(netlifyIdentity.currentUser());
+    const [token, setToken] = useState(null);
 
     useEffect(() => {
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                // Check if token is expired
-                if (decoded.exp * 1000 > Date.now()) {
-                    setUser({ email: decoded.email, name: decoded.name, userId: decoded.sub });
-                } else {
-                    // Token is expired
-                    logout();
-                }
-            } catch (error) {
-                console.error("Invalid token:", error);
-                logout();
-            }
-        }
-    }, [token]);
+        // Initialize Netlify Identity
+        netlifyIdentity.init();
 
-    const login = (newToken) => {
-        localStorage.setItem('authToken', newToken);
-        setToken(newToken);
+        // Set user on login
+        const handleLogin = (user) => {
+            setUser(user);
+            const jwt = user.token.access_token;
+            setToken(jwt);
+            // The widget automatically handles localStorage
+        };
+        netlifyIdentity.on('login', handleLogin);
+
+        // Clear user on logout
+        const handleLogout = () => {
+            setUser(null);
+            setToken(null);
+        };
+        netlifyIdentity.on('logout', handleLogout);
+
+        // Handle initial user load
+        netlifyIdentity.on('init', (user) => {
+            setUser(user);
+            if (user) {
+                const jwt = user.token.access_token;
+                setToken(jwt);
+            }
+        });
+
+        return () => {
+            netlifyIdentity.off('login', handleLogin);
+            netlifyIdentity.off('logout', handleLogout);
+        };
+    }, []);
+
+    const login = () => {
+        netlifyIdentity.open('login');
+    };
+
+    const signup = () => {
+        netlifyIdentity.open('signup');
     };
 
     const logout = () => {
-        localStorage.removeItem('authToken');
-        setToken(null);
-        setUser(null);
+        netlifyIdentity.logout();
     };
 
     const isAuthenticated = () => {
-        return !!token;
+        return !!netlifyIdentity.currentUser();
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isAuthenticated, token }}>
+        <AuthContext.Provider value={{ user, login, logout, signup, isAuthenticated, token }}>
             {children}
         </AuthContext.Provider>
     );
