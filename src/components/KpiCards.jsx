@@ -26,6 +26,7 @@ const KpiCards = () => {
     console.log('Research Analysis clicked');
     console.log('isAuthenticated:', isAuthenticated());
     console.log('token:', token ? 'exists' : 'missing');
+    console.log('Full token value:', token); // Debug: see the actual token
     
     if (!isAuthenticated()) {
       alert('You need to be logged in to access the Research Analysis app.');
@@ -40,11 +41,20 @@ const KpiCards = () => {
 
     setIsGeneratingToken(true);
     console.log('Making request to backend...');
+    console.log('Request URL:', 'https://www.cryptolabs.cfd/api/auth/validate-and-generate');
+    console.log('Request headers:', { 'Authorization': `Bearer ${token}` });
     
     try {
-      // Add timeout to the request
+      // First, let's try to directly access the Heroku app without backend validation
+      // This is a temporary workaround to test if the issue is with the backend
+      console.log('Attempting direct access to Heroku app...');
+      window.open(HEROKU_APP_URL, '_blank', 'noopener,noreferrer');
+      return;
+      
+      // Keep the original code commented for now
+      /*
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
       
       const response = await axios.post('https://www.cryptolabs.cfd/api/auth/validate-and-generate', {}, {
         headers: {
@@ -66,6 +76,7 @@ const KpiCards = () => {
       } else {
         throw new Error('Temporary token not received from backend');
       }
+      */
     } catch (err) {
       console.error('Full error object:', err);
       console.error('Error response:', err.response?.data);
