@@ -26,7 +26,6 @@ const KpiCards = () => {
     console.log('Research Analysis clicked');
     console.log('isAuthenticated:', isAuthenticated());
     console.log('token:', token ? 'exists' : 'missing');
-    console.log('Full token value:', token); // Debug: see the actual token
     
     if (!isAuthenticated()) {
       alert('You need to be logged in to access the Research Analysis app.');
@@ -42,21 +41,43 @@ const KpiCards = () => {
     setIsGeneratingToken(true);
     
     try {
-      // Since the backend authentication is failing, let's try direct access
-      // for authenticated users as a workaround
-      console.log('Attempting direct access to Heroku app...');
+      console.log('Exchanging Netlify token for session token...');
       
-      // Option 1: Direct access without backend validation
-      window.open(HEROKU_APP_URL, '_blank', 'noopener,noreferrer');
-      
-      // Option 2: Pass the Netlify token directly to the Heroku app
-      // Uncomment this if the Heroku app can validate Netlify tokens directly
-      // const urlWithToken = `${HEROKU_APP_URL}?netlify_token=${encodeURIComponent(token)}`;
-      // window.open(urlWithToken, '_blank', 'noopener,noreferrer');
+      // Step 1: Exchange Netlify token for a backend session token
+      const response = await axios.post('https://www.cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
+        netlify_token: token
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 10000
+      });
+
+      if (response.data && response.data.session_token) {
+        console.log('Successfully received session token');
+        
+        // Step 2: Open the Heroku app with the session token
+        const urlWithSessionToken = `${HEROKU_APP_URL}?session_token=${encodeURIComponent(response.data.session_token)}`;
+        window.open(urlWithSessionToken, '_blank', 'noopener,noreferrer');
+      } else {
+        throw new Error('No session token received from backend');
+      }
       
     } catch (err) {
-      console.error('Error opening Heroku app:', err);
-      alert('Failed to access Research Analysis. Please try again later.');
+      console.error('Error with token exchange:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      
+      // Fallback: Try direct access for debugging
+      if (err.response?.status === 401) {
+        alert('Authentication failed. Please log in again.');
+      } else if (err.response?.status === 403) {
+        alert('Access denied. Please contact support.');
+      } else {
+        console.log('Attempting direct access as fallback...');
+        alert('Token exchange failed. Trying direct access...');
+        window.open(HEROKU_APP_URL, '_blank', 'noopener,noreferrer');
+      }
     } finally {
       setIsGeneratingToken(false);
     }
