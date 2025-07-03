@@ -15,9 +15,12 @@ const kpis = [
 const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
 
 const KpiCards = () => {
-  const { isAuthenticated, token } = useAuth(); // Get auth state
+  const auth = useAuth(); // Get auth state
   const navigate = useNavigate(); // Get navigate function
   const [isGeneratingToken, setIsGeneratingToken] = useState(false); // New state for loading
+
+  // Safely destructure auth values with fallbacks
+  const { isAuthenticated = () => false, token = null } = auth || {};
 
   const handleResearchAnalysisClick = async () => {
     console.log('Research Analysis clicked');

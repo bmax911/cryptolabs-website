@@ -1,112 +1,98 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('netlify_jwt'));
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
+    const [token, setToken] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); // Start with false to avoid blocking
 
     useEffect(() => {
-        // Function to initialize and set up listeners
-        const initNetlifyIdentity = () => {
-            const netlifyIdentity = window.netlifyIdentity;
-            if (netlifyIdentity) {
-                // Set initial user state
-                const currentUser = netlifyIdentity.currentUser();
-                setUser(currentUser);
-                if (currentUser) {
-                    const storedToken = localStorage.getItem('netlify_jwt');
-                    if (storedToken) {
-                        setToken(storedToken);
-                    }
-                }
-
-                // Set user on login
-                const handleLogin = (user) => {
-                    setUser(user);
-                    const jwt = user.token.access_token;
-                    setToken(jwt);
-                    localStorage.setItem('netlify_jwt', jwt);
-                    navigate('/dashboard');
-                };
-                netlifyIdentity.on('login', handleLogin);
-
-                // Clear user on logout
-                const handleLogout = () => {
-                    setUser(null);
-                    setToken(null);
-                    localStorage.removeItem('netlify_jwt');
-                };
-                netlifyIdentity.on('logout', handleLogout);
-
-                // Handle initial user load
-                netlifyIdentity.on('init', (user) => {
-                    setUser(user);
-                    if (user) {
-                        const jwt = user.token.access_token;
-                        setToken(jwt);
-                        localStorage.setItem('netlify_jwt', jwt);
-                    }
-                    setIsLoading(false);
-                });
-
-                // Initialize the widget
-                netlifyIdentity.init();
+        // Minimal auth check - don't block rendering
+        try {
+            const storedToken = localStorage.getItem('netlify_jwt');
+            if (storedToken) {
+                setToken(storedToken);
             }
-        };
-
-        // Check if the script has already loaded
-        if (window.netlifyIdentity) {
-            initNetlifyIdentity();
-        } else {
-            // If not, wait for the script to load
-            document.addEventListener('netlify-identity-widget-init', initNetlifyIdentity);
+        } catch (error) {
+            console.warn('Could not check stored token:', error);
         }
-
-        return () => {
-            // Cleanup listeners on component unmount
-            const netlifyIdentity = window.netlifyIdentity;
-            if (netlifyIdentity) {
-                netlifyIdentity.off('login');
-                netlifyIdentity.off('logout');
-                netlifyIdentity.off('init');
-            }
-            document.removeEventListener('netlify-identity-widget-init', initNetlifyIdentity);
-        };
-    }, [navigate]);
+    }, []);
 
     const login = () => {
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.open('login');
+        try {
+            if (window.netlifyIdentity) {
+                window.netlifyIdentity.open('login');
+            } else {
+                alert('Please refresh the page and try again.');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Login service unavailable. Please refresh the page.');
         }
     };
 
     const signup = () => {
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.open('signup');
+        try {
+            if (window.netlifyIdentity) {
+                window.netlifyIdentity.open('signup');
+            } else {
+                alert('Please refresh the page and try again.');
+            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            alert('Signup service unavailable. Please refresh the page.');
         }
     };
 
     const logout = () => {
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.logout();
+        try {
+            if (window.netlifyIdentity) {
+                window.netlifyIdentity.logout();
+            }
+        } catch (error) {
+            console.warn('Logout error:', error);
+        } finally {
+            setUser(null);
+            setToken(null);
+            localStorage.removeItem('netlify_jwt');
         }
     };
 
     const isAuthenticated = () => {
-        return !!window.netlifyIdentity?.currentUser();
+        return !!(user || token);
+    };
+
+    const value = {
+        user,
+        login,
+        logout,
+        signup,
+        isAuthenticated,
+        token,
+        isLoading
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, signup, isAuthenticated, token, isLoading }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
 };
 
 export const useAuth = () => {
-    return useContext(AuthContext);
+    const context = useContext(AuthContext);
+    if (!context) {
+        // Fallback instead of throwing error
+        return {
+            user: null,
+            login: () => {},
+            logout: () => {},
+            signup: () => {},
+            isAuthenticated: () => false,
+            token: null,
+            isLoading: false
+        };
+    }
+    return context;
 };
