@@ -23,17 +23,28 @@ const KpiCards = () => {
   const { isAuthenticated = () => false, token = null } = auth || {};
 
   const handleResearchAnalysisClick = async () => {
+    console.log('=== RESEARCH ANALYSIS CLICK DEBUG ===');
     console.log('Research Analysis clicked');
     console.log('isAuthenticated:', isAuthenticated());
-    console.log('token:', token ? 'exists' : 'missing');
+    console.log('token exists:', token ? 'yes' : 'no');
+    console.log('token length:', token ? token.length : 'N/A');
+    console.log('token (first 50 chars):', token ? token.substring(0, 50) + '...' : 'missing');
+    
+    // Also check localStorage directly
+    const storedToken = localStorage.getItem('netlify_jwt');
+    console.log('localStorage token exists:', storedToken ? 'yes' : 'no');
+    console.log('localStorage token (first 50 chars):', storedToken ? storedToken.substring(0, 50) + '...' : 'missing');
     
     if (!isAuthenticated()) {
       alert('You need to be logged in to access the Research Analysis app.');
       return;
     }
 
-    if (!token || token.trim() === '') {
-        console.error('Token is missing or empty:', token);
+    const tokenToUse = token || storedToken;
+    if (!tokenToUse || tokenToUse.trim() === '') {
+        console.error('Token is missing or empty');
+        console.error('Auth context token:', token);
+        console.error('localStorage token:', storedToken);
         alert('Authentication token is missing. Please log in again.');
         return;
     }
@@ -42,10 +53,11 @@ const KpiCards = () => {
     
     try {
       console.log('Exchanging Netlify token for session token...');
+      console.log('Using token (first 50 chars):', tokenToUse.substring(0, 50) + '...');
       
       // Step 1: Exchange Netlify token for a backend session token
       const response = await axios.post('https://www.cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
-        netlify_token: token
+        netlify_token: tokenToUse
       }, {
         headers: {
           'Content-Type': 'application/json'
