@@ -6,6 +6,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('netlify_jwt'));
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,6 +50,7 @@ export const AuthProvider = ({ children }) => {
                         setToken(jwt);
                         localStorage.setItem('netlify_jwt', jwt);
                     }
+                    setIsLoading(false);
                 });
 
                 // Initialize the widget
@@ -99,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, signup, isAuthenticated, token }}>
+        <AuthContext.Provider value={{ user, login, logout, signup, isAuthenticated, token, isLoading }}>
             {children}
         </AuthContext.Provider>
     );
