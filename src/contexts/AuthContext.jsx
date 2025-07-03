@@ -1,10 +1,12 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('netlify_jwt'));
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Function to initialize and set up listeners
@@ -12,13 +14,22 @@ export const AuthProvider = ({ children }) => {
             const netlifyIdentity = window.netlifyIdentity;
             if (netlifyIdentity) {
                 // Set initial user state
-                setUser(netlifyIdentity.currentUser());
+                const currentUser = netlifyIdentity.currentUser();
+                setUser(currentUser);
+                if (currentUser) {
+                    const storedToken = localStorage.getItem('netlify_jwt');
+                    if (storedToken) {
+                        setToken(storedToken);
+                    }
+                }
 
                 // Set user on login
                 const handleLogin = (user) => {
                     setUser(user);
                     const jwt = user.token.access_token;
                     setToken(jwt);
+                    localStorage.setItem('netlify_jwt', jwt);
+                    navigate('/dashboard');
                 };
                 netlifyIdentity.on('login', handleLogin);
 
@@ -26,6 +37,7 @@ export const AuthProvider = ({ children }) => {
                 const handleLogout = () => {
                     setUser(null);
                     setToken(null);
+                    localStorage.removeItem('netlify_jwt');
                 };
                 netlifyIdentity.on('logout', handleLogout);
 
@@ -35,6 +47,7 @@ export const AuthProvider = ({ children }) => {
                     if (user) {
                         const jwt = user.token.access_token;
                         setToken(jwt);
+                        localStorage.setItem('netlify_jwt', jwt);
                     }
                 });
 
@@ -61,7 +74,7 @@ export const AuthProvider = ({ children }) => {
             }
             document.removeEventListener('netlify-identity-widget-init', initNetlifyIdentity);
         };
-    }, []);
+    }, [navigate]);
 
     const login = () => {
         if (window.netlifyIdentity) {
