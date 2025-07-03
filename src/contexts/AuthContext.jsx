@@ -5,7 +5,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
-    const [isLoading, setIsLoading] = useState(false); // Start with false to avoid blocking
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Minimal auth check - don't block rendering
@@ -16,6 +16,75 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.warn('Could not check stored token:', error);
+        }
+
+        // Set up Netlify Identity event listeners
+        const setupNetlifyIdentity = () => {
+            if (window.netlifyIdentity) {
+                // Handle login event
+                window.netlifyIdentity.on('login', (user) => {
+                    console.log('User logged in:', user);
+                    setUser(user);
+                    if (user.token) {
+                        const jwt = user.token.access_token;
+                        setToken(jwt);
+                        localStorage.setItem('netlify_jwt', jwt);
+                    }
+                    window.netlifyIdentity.close();
+                    // Redirect to dashboard
+                    window.location.href = '/dashboard';
+                });
+
+                // Handle logout event
+                window.netlifyIdentity.on('logout', () => {
+                    console.log('User logged out');
+                    setUser(null);
+                    setToken(null);
+                    localStorage.removeItem('netlify_jwt');
+                    window.location.href = '/';
+                });
+
+                // Handle signup event
+                window.netlifyIdentity.on('signup', (user) => {
+                    console.log('User signed up:', user);
+                    setUser(user);
+                    if (user.token) {
+                        const jwt = user.token.access_token;
+                        setToken(jwt);
+                        localStorage.setItem('netlify_jwt', jwt);
+                    }
+                    window.netlifyIdentity.close();
+                    // Redirect to dashboard
+                    window.location.href = '/dashboard';
+                });
+
+                // Check for existing user
+                const currentUser = window.netlifyIdentity.currentUser();
+                if (currentUser) {
+                    setUser(currentUser);
+                    if (currentUser.token) {
+                        const jwt = currentUser.token.access_token;
+                        setToken(jwt);
+                        localStorage.setItem('netlify_jwt', jwt);
+                    }
+                }
+            }
+        };
+
+        // Try to set up immediately or wait for script to load
+        if (window.netlifyIdentity) {
+            setupNetlifyIdentity();
+        } else {
+            // Wait for netlify identity to load
+            const checkForNetlify = setInterval(() => {
+                if (window.netlifyIdentity) {
+                    setupNetlifyIdentity();
+                    clearInterval(checkForNetlify);
+                }
+            }, 100);
+
+            // Clean up interval after 10 seconds
+            setTimeout(() => clearInterval(checkForNetlify), 10000);
         }
     }, []);
 
@@ -49,13 +118,20 @@ export const AuthProvider = ({ children }) => {
         try {
             if (window.netlifyIdentity) {
                 window.netlifyIdentity.logout();
+            } else {
+                // Manual logout if netlify identity not available
+                setUser(null);
+                setToken(null);
+                localStorage.removeItem('netlify_jwt');
+                window.location.href = '/';
             }
         } catch (error) {
             console.warn('Logout error:', error);
-        } finally {
+            // Fallback manual logout
             setUser(null);
             setToken(null);
             localStorage.removeItem('netlify_jwt');
+            window.location.href = '/';
         }
     };
 
