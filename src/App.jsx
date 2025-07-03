@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
 import PricingPage from './pages/PricingPage';
 // import AuthPage from './pages/AuthPage'; // REMOVED - This file does not exist and is no longer needed.
 import TermsOfUsePage from './pages/TermsOfUsePage';
@@ -57,6 +58,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/login" element={<LoginPage />} />
