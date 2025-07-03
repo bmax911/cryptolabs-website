@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AuthContext = createContext(null);
 
@@ -6,6 +7,8 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         // Minimal auth check - don't block rendering
@@ -31,8 +34,11 @@ export const AuthProvider = ({ children }) => {
                         localStorage.setItem('netlify_jwt', jwt);
                     }
                     window.netlifyIdentity.close();
-                    // Redirect to dashboard
-                    window.location.href = '/dashboard';
+                    
+                    // Use React Router navigate instead of window.location
+                    setTimeout(() => {
+                        navigate('/dashboard', { replace: true });
+                    }, 100);
                 });
 
                 // Handle logout event
@@ -41,7 +47,7 @@ export const AuthProvider = ({ children }) => {
                     setUser(null);
                     setToken(null);
                     localStorage.removeItem('netlify_jwt');
-                    window.location.href = '/';
+                    navigate('/', { replace: true });
                 });
 
                 // Handle signup event
@@ -54,8 +60,11 @@ export const AuthProvider = ({ children }) => {
                         localStorage.setItem('netlify_jwt', jwt);
                     }
                     window.netlifyIdentity.close();
-                    // Redirect to dashboard
-                    window.location.href = '/dashboard';
+                    
+                    // Use React Router navigate instead of window.location
+                    setTimeout(() => {
+                        navigate('/dashboard', { replace: true });
+                    }, 100);
                 });
 
                 // Check for existing user
@@ -86,7 +95,7 @@ export const AuthProvider = ({ children }) => {
             // Clean up interval after 10 seconds
             setTimeout(() => clearInterval(checkForNetlify), 10000);
         }
-    }, []);
+    }, [navigate]);
 
     const login = () => {
         try {
@@ -123,7 +132,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(null);
                 setToken(null);
                 localStorage.removeItem('netlify_jwt');
-                window.location.href = '/';
+                navigate('/', { replace: true });
             }
         } catch (error) {
             console.warn('Logout error:', error);
@@ -131,7 +140,7 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             setToken(null);
             localStorage.removeItem('netlify_jwt');
-            window.location.href = '/';
+            navigate('/', { replace: true });
         }
     };
 
