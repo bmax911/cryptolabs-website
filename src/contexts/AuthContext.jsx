@@ -1,61 +1,88 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import netlifyIdentity from 'netlify-identity-widget';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(netlifyIdentity.currentUser());
+    const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
 
     useEffect(() => {
-        // Initialize Netlify Identity
-        netlifyIdentity.init();
+        // Function to initialize and set up listeners
+        const initNetlifyIdentity = () => {
+            const netlifyIdentity = window.netlifyIdentity;
+            if (netlifyIdentity) {
+                // Set initial user state
+                setUser(netlifyIdentity.currentUser());
 
-        // Set user on login
-        const handleLogin = (user) => {
-            setUser(user);
-            const jwt = user.token.access_token;
-            setToken(jwt);
-            // The widget automatically handles localStorage
-        };
-        netlifyIdentity.on('login', handleLogin);
+                // Set user on login
+                const handleLogin = (user) => {
+                    setUser(user);
+                    const jwt = user.token.access_token;
+                    setToken(jwt);
+                };
+                netlifyIdentity.on('login', handleLogin);
 
-        // Clear user on logout
-        const handleLogout = () => {
-            setUser(null);
-            setToken(null);
-        };
-        netlifyIdentity.on('logout', handleLogout);
+                // Clear user on logout
+                const handleLogout = () => {
+                    setUser(null);
+                    setToken(null);
+                };
+                netlifyIdentity.on('logout', handleLogout);
 
-        // Handle initial user load
-        netlifyIdentity.on('init', (user) => {
-            setUser(user);
-            if (user) {
-                const jwt = user.token.access_token;
-                setToken(jwt);
+                // Handle initial user load
+                netlifyIdentity.on('init', (user) => {
+                    setUser(user);
+                    if (user) {
+                        const jwt = user.token.access_token;
+                        setToken(jwt);
+                    }
+                });
+
+                // Initialize the widget
+                netlifyIdentity.init();
             }
-        });
+        };
+
+        // Check if the script has already loaded
+        if (window.netlifyIdentity) {
+            initNetlifyIdentity();
+        } else {
+            // If not, wait for the script to load
+            document.addEventListener('netlify-identity-widget-init', initNetlifyIdentity);
+        }
 
         return () => {
-            netlifyIdentity.off('login', handleLogin);
-            netlifyIdentity.off('logout', handleLogout);
+            // Cleanup listeners on component unmount
+            const netlifyIdentity = window.netlifyIdentity;
+            if (netlifyIdentity) {
+                netlifyIdentity.off('login');
+                netlifyIdentity.off('logout');
+                netlifyIdentity.off('init');
+            }
+            document.removeEventListener('netlify-identity-widget-init', initNetlifyIdentity);
         };
     }, []);
 
     const login = () => {
-        netlifyIdentity.open('login');
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.open('login');
+        }
     };
 
     const signup = () => {
-        netlifyIdentity.open('signup');
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.open('signup');
+        }
     };
 
     const logout = () => {
-        netlifyIdentity.logout();
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.logout();
+        }
     };
 
     const isAuthenticated = () => {
-        return !!netlifyIdentity.currentUser();
+        return !!window.netlifyIdentity?.currentUser();
     };
 
     return (
