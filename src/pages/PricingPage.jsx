@@ -58,13 +58,41 @@ const PricingPage = () => {
   const [currency, setCurrency] = useState('USD');
   const { isAuthenticated } = useAuth(); // Get authentication state
 
+  // Base prices in USD with auto-calculated exchange rates
+  const basePrice = {
+    basic: 9.00,
+    pro: 29.00,
+    enterprise: 99.00,
+    test: 0.01
+  };
+
+  // Exchange rates (these would typically come from an API)
+  const exchangeRates = {
+    USD: 1,
+    EUR: 0.85, // 1 USD = 0.85 EUR
+    USDT: 1.00 // 1 USD = 1.00 USDT (stable)
+  };
+
+  // Calculate prices based on exchange rates
   const prices = {
-    USD: { basic: '9.00', pro: '29.00', enterprise: '99.00', test: '0.01' },
-    EUR: { basic: '7.00', pro: '27.00', enterprise: '97.00', test: '0.01' },
-    // Note: PayPal does not directly support USDT. 
-    // This would require a different integration or conversion process.
-    // For this example, we will disable PayPal for USDT.
-    USDT: { basic: '10.00', pro: '30.00', enterprise: '100.00' },
+    USD: {
+      basic: basePrice.basic.toFixed(2),
+      pro: basePrice.pro.toFixed(2),
+      enterprise: basePrice.enterprise.toFixed(2),
+      test: basePrice.test.toFixed(2)
+    },
+    EUR: {
+      basic: (basePrice.basic * exchangeRates.EUR).toFixed(2),
+      pro: (basePrice.pro * exchangeRates.EUR).toFixed(2),
+      enterprise: (basePrice.enterprise * exchangeRates.EUR).toFixed(2),
+      test: (basePrice.test * exchangeRates.EUR).toFixed(2)
+    },
+    USDT: {
+      basic: (basePrice.basic * exchangeRates.USDT).toFixed(2),
+      pro: (basePrice.pro * exchangeRates.USDT).toFixed(2),
+      enterprise: (basePrice.enterprise * exchangeRates.USDT).toFixed(2),
+      test: (basePrice.test * exchangeRates.USDT).toFixed(2)
+    }
   };
 
   const currencySymbols = {
@@ -94,86 +122,146 @@ const PricingPage = () => {
           </div>
 
           {/* Pricing Tiers */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {/* Basic Plan */}
-            <div className="feature-card p-8 rounded-xl flex flex-col">
-              <h2 className="text-2xl font-bold text-white mb-2">Basic</h2>
-              <p className="text-gray-400 mb-6">For individuals and hobbyists</p>
-              <div className="text-4xl font-bold text-white mb-6">{currencySymbols[currency]}{prices[currency].basic}<span className="text-lg font-normal text-gray-400">/mo</span></div>
-              <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Trading Fee Cashback</li>
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Basic AI Analysis</li>
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Calendar Integration</li>
+            <div className="feature-card p-8 rounded-xl flex flex-col relative">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white mb-2">BASIC</h2>
+                <p className="text-cyan-400 font-semibold mb-2">Get Started, Stay Smart</p>
+                <p className="text-gray-400 text-sm mb-4">Perfect for casual traders and curious learners.</p>
+                <div className="text-4xl font-bold text-white mb-2">
+                  {currencySymbols[currency]}{prices[currency].basic}
+                  <span className="text-lg font-normal text-gray-400">/month</span>
+                </div>
+                <p className="text-xs text-gray-500">(or Free with account)</p>
+              </div>
+              
+              <ul className="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>Up to 90% fee cashback (Binance, OKX, etc.)</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>Access to Lite Trading Charts</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>AI Assistant – Quick Mode (3 queries/day)</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>Trading Diary – Basic Canvas (Text, Notes, Daily Entry Limit)</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>Create Unlimited Custom Watchlist</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>View Top 5 Macroeconomic Indicators</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>Email summary every 2 days</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>Access to Community Forum</span></li>
+                <li className="flex items-start"><span className="text-green-400 mr-3 mt-0.5">✅</span><span>Mobile-friendly Dashboard</span></li>
               </ul>
+              
+              <div className="mb-6 p-4 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+                <p className="text-cyan-300 text-sm"><span className="font-bold">🚀 Great for:</span> New traders, students, or passive investors who want insights without overwhelm.</p>
+              </div>
+              
               <div className="mt-auto">
                 {isAuthenticated() ? (
                     currency !== 'USDT' ? (
                         <Checkout currency={currency} plan="Basic" price={prices[currency].basic} />
                     ) : (
-                        <Link to="/signup" className="w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Get Started with USDT</Link>
+                        <Link to="/signup" className="w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors block">Get Started with USDT</Link>
                     )
                 ) : (
-                    <Link to="/signup" className="w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Login to Purchase</Link>
+                    <Link to="/signup" className="w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors block">Login to Purchase</Link>
                 )}
               </div>
             </div>
 
             {/* Pro Plan */}
-            <div className="feature-card p-8 rounded-xl flex flex-col border-2 border-cyan-500 relative">
-              <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-cyan-500 text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
-              <h2 className="text-2xl font-bold text-white mb-2">Pro</h2>
-              <p className="text-gray-400 mb-6">For serious traders and professionals</p>
-              <div className="text-4xl font-bold text-white mb-6">{currencySymbols[currency]}{prices[currency].pro}<span className="text-lg font-normal text-gray-400">/mo</span></div>
-              <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Everything in Basic</li>
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Advanced AI Analysis &amp; Signals</li>
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Priority Support</li>
+            <div className="feature-card p-8 rounded-xl flex flex-col border-2 border-cyan-500 relative scale-105 lg:scale-110">
+              <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg">MOST POPULAR</div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white mb-2">PRO</h2>
+                <p className="text-cyan-400 font-semibold mb-2">For the Daily Hustlers</p>
+                <p className="text-gray-400 text-sm mb-4">Ideal for active traders and investors who want insights and automation.</p>
+                <div className="text-4xl font-bold text-white mb-2">
+                  {currencySymbols[currency]}{prices[currency].pro}
+                  <span className="text-lg font-normal text-gray-400">/month</span>
+                </div>
+              </div>
+              
+              <ul className="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Up to 90% trading fee cashback</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Pro Chart Tools (multi-screen layout, drawing tools, auto pattern detection)</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>AI Assistant – Smart Mode (50 queries/day, trade strategy generation)</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Trading Diary – Smart Canvas (notes, uploads, AI auto-summarization)</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Add up to 5 Watchlists with alerts</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Full World Bank Macro Dashboard (real-time indicators, trend alerts)</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Email + App Daily Report</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Weekly Portfolio Review by AI</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Customize dashboard layout and theme</span></li>
+                <li className="flex items-start"><span className="text-orange-400 mr-3 mt-0.5">🔥</span><span>Priority support</span></li>
               </ul>
+              
+              <div className="mb-6 p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
+                <p className="text-orange-300 text-sm"><span className="font-bold">⚖️ Built for:</span> Swing traders, technical analysts, smart investors, and crypto explorers.</p>
+              </div>
+              
               <div className="mt-auto">
                  {isAuthenticated() ? (
                     currency !== 'USDT' ? (
                         <Checkout currency={currency} plan="Pro" price={prices[currency].pro} />
                     ) : (
-                        <Link to="/signup" className="w-full text-center bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Choose Pro with USDT</Link>
+                        <Link to="/signup" className="w-full text-center bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-3 px-5 rounded-md transition-colors block">Choose Pro with USDT</Link>
                     )
                 ) : (
-                    <Link to="/signup" className="w-full text-center bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Login to Purchase</Link>
+                    <Link to="/signup" className="w-full text-center bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-3 px-5 rounded-md transition-colors block">Login to Purchase</Link>
                 )}
               </div>
             </div>
 
             {/* Enterprise Plan */}
             <div className="feature-card p-8 rounded-xl flex flex-col">
-              <h2 className="text-2xl font-bold text-white mb-2">Enterprise</h2>
-              <p className="text-gray-400 mb-6">For teams and institutions</p>
-              <div className="text-4xl font-bold text-white mb-6">{currencySymbols[currency]}{prices[currency].enterprise}<span className="text-lg font-normal text-gray-400">/mo</span></div>
-              <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Everything in Pro</li>
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Team Accounts &amp; Management</li>
-                <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Dedicated API Access</li>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white mb-2">ENTERPRISE</h2>
+                <p className="text-purple-400 font-semibold mb-2">Your Trading Brain, Fully Upgraded</p>
+                <p className="text-gray-400 text-sm mb-4">For professional traders, funds, or advanced users who demand it all.</p>
+                <div className="text-4xl font-bold text-white mb-2">
+                  {currencySymbols[currency]}{prices[currency].enterprise}
+                  <span className="text-lg font-normal text-gray-400">/month</span>
+                </div>
+              </div>
+              
+              <ul className="space-y-3 text-sm text-gray-300 mb-8 flex-grow">
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>Up to 90% fee cashback across all supported exchanges</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>Institutional-grade Chart Suite + advanced indicators</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>AI Assistant – Deep Dive Mode (unlimited queries, long-form reasoning, cross-market analysis)</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>Trading Diary – Pro Canvas (attachments, voice notes, visual markup, AI timeline tracking)</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>Unlimited Watchlists + Smart Alerts</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>Macro Data AI Correlation Engine (see how macro shifts impact your trades)</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>End-of-day Executive Summary Reports (PDF, dashboard)</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>Early access to Beta Tools & Features</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>Team Collaboration Tools (share diary, watchlists, notes)</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>1-on-1 Strategy Session (monthly with AI or human analyst)</span></li>
+                <li className="flex items-start"><span className="text-purple-400 mr-3 mt-0.5">💎</span><span>24/7 Premium Support</span></li>
               </ul>
-              <a href="mailto:support@zephyrboost.com" className="mt-auto w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors block">Contact Us</a>
+              
+              <div className="mb-6 p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                <p className="text-purple-300 text-sm"><span className="font-bold">🧠 Designed for:</span> Professional traders, funds, crypto businesses, or any user serious about high-performance trading.</p>
+              </div>
+              
+              <a href="mailto:support@zephyrboost.com" className="mt-auto w-full text-center bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold py-3 px-5 rounded-md transition-colors block">Contact Us</a>
             </div>
 
             {/* Test Plan - Only shows in development */}
             {import.meta.env.DEV && (
-              <div className="feature-card p-8 rounded-xl flex flex-col border-2 border-dashed border-yellow-500">
-                <h2 className="text-2xl font-bold text-yellow-500 mb-2">Test Plan</h2>
-                <p className="text-gray-400 mb-6">For testing purposes only</p>
-                <div className="text-4xl font-bold text-white mb-6">{currencySymbols[currency]}{prices[currency].test}<span className="text-lg font-normal text-gray-400">/mo</span></div>
-                <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
-                  <li className="flex items-center"><svg className="w-5 h-5 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Full functionality</li>
-                </ul>
-                <div className="mt-auto">
-                  {isAuthenticated() ? (
-                      currency !== 'USDT' ? (
-                          <Checkout currency={currency} plan="Test" price={prices[currency].test} />
-                      ) : (
-                          <p className="text-yellow-500">USDT not available for test plan.</p>
-                      )
-                  ) : (
-                      <Link to="/signup" className="w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-md transition-colors">Login to Purchase</Link>
-                  )}
+              <div className="lg:col-span-3 max-w-md mx-auto">
+                <div className="feature-card p-6 rounded-xl flex flex-col border-2 border-dashed border-yellow-500">
+                  <h2 className="text-xl font-bold text-yellow-500 mb-2">Test Plan</h2>
+                  <p className="text-gray-400 mb-4 text-sm">For testing purposes only</p>
+                  <div className="text-3xl font-bold text-white mb-4">{currencySymbols[currency]}{prices[currency].test}<span className="text-sm font-normal text-gray-400">/month</span></div>
+                  <ul className="space-y-2 text-gray-300 mb-6 flex-grow">
+                    <li className="flex items-center text-sm"><svg className="w-4 h-4 text-cyan-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Full functionality</li>
+                  </ul>
+                  <div className="mt-auto">
+                    {isAuthenticated() ? (
+                        currency !== 'USDT' ? (
+                            <Checkout currency={currency} plan="Test" price={prices[currency].test} />
+                        ) : (
+                            <p className="text-yellow-500 text-center text-sm">USDT not available for test plan.</p>
+                        )
+                    ) : (
+                        <Link to="/signup" className="w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition-colors block text-sm">Login to Purchase</Link>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
