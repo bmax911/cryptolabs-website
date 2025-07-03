@@ -59,12 +59,12 @@ const PricingPage = () => {
   const { isAuthenticated } = useAuth(); // Get authentication state
 
   const prices = {
-    USD: { basic: '29.00', pro: '99.00', enterprise: '249.00', test: '0.01' },
-    EUR: { basic: '25.00', pro: '89.00', enterprise: '229.00', test: '0.01' },
+    USD: { basic: '9.00', pro: '29.00', enterprise: '99.00', test: '0.01' },
+    EUR: { basic: '7.00', pro: '27.00', enterprise: '97.00', test: '0.01' },
     // Note: PayPal does not directly support USDT. 
     // This would require a different integration or conversion process.
     // For this example, we will disable PayPal for USDT.
-    USDT: { basic: '30.00', pro: '100.00', enterprise: '250.00' },
+    USDT: { basic: '10.00', pro: '30.00', enterprise: '100.00' },
   };
 
   const currencySymbols = {
