@@ -25,10 +25,15 @@ const KpiCards = () => {
       return;
     }
 
+    if (!token) {
+        alert('Authentication token is missing. Please log in again.');
+        return;
+    }
+
     setIsGeneratingToken(true);
     try {
       // Make a request to your backend to get a temporary token
-      const response = await axios.post('https://cryptolabs.icu/api/auth/validate-and-generate', {}, {
+      const response = await axios.post('https://www.cryptolabs.cfd/api/auth/validate-and-generate', {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
