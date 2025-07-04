@@ -430,6 +430,14 @@
   .pricing-container::before {
     animation: none;
   }
+  
+  .portfolio-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .portfolio-card {
+    padding: 16px;
+  }
 }
 
 /* Accessibility */
@@ -473,4 +481,415 @@
 @keyframes spin {
   0% { transform: translate(-50%, -50%) rotate(0deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Crypto Overview Page Styles */
+
+/* Crypto Tabs */
+.crypto-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.crypto-tab {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin: 0 4px;
+  color: #94a3b8;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.crypto-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 255, 255, 0.3);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.crypto-tab.active {
+  background: linear-gradient(135deg, #00ffff, #0066ff);
+  border-color: rgba(0, 255, 255, 0.5);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+}
+
+/* Crypto Filters */
+.crypto-filters {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 2rem;
+}
+
+.crypto-select, .crypto-search {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: white;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.crypto-select:focus, .crypto-search:focus {
+  outline: none;
+  border-color: rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.1);
+}
+
+.crypto-select option {
+  background: #1e293b;
+  color: white;
+}
+
+/* Crypto Table */
+.crypto-table-container {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.crypto-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.crypto-table-header {
+  background: rgba(0, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 20px;
+  font-weight: 600;
+  color: #00ffff;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.crypto-table-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.crypto-table-row {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.crypto-table-row:hover {
+  background: rgba(0, 255, 255, 0.05);
+  transform: translateX(4px);
+}
+
+.crypto-table-row:last-child {
+  border-bottom: none;
+}
+
+/* Action Buttons */
+.crypto-action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: #94a3b8;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.crypto-action-btn:hover {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: rgba(0, 255, 255, 0.4);
+  color: #00ffff;
+  transform: scale(1.1);
+}
+
+/* Trending Cards */
+.crypto-trending-card {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.crypto-trending-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.crypto-trending-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 165, 0, 0.3);
+  box-shadow: 0 12px 24px rgba(255, 165, 0, 0.15);
+}
+
+.crypto-trending-card:hover::before {
+  opacity: 1;
+}
+
+/* Gainer/Loser Cards */
+.crypto-gainer-card, .crypto-loser-card {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.crypto-gainer-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(34, 197, 94, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.crypto-loser-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(239, 68, 68, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.crypto-gainer-card:hover {
+  border-color: rgba(34, 197, 94, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(34, 197, 94, 0.15);
+}
+
+.crypto-loser-card:hover {
+  border-color: rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.15);
+}
+
+.crypto-gainer-card:hover::before,
+.crypto-loser-card:hover::before {
+  opacity: 1;
+}
+
+/* Scrollbar Styling */
+.crypto-table-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.crypto-table-body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.crypto-table-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.crypto-table-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 255, 0.5);
+}
+
+/* Loading States */
+.crypto-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.crypto-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-top: 3px solid #00ffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive Design for Crypto Tables */
+@media (max-width: 1024px) {
+  .crypto-table-header,
+  .crypto-table-row {
+    padding: 12px 16px;
+  }
+  
+  .crypto-table-header {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .crypto-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .crypto-tab {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin: 2px;
+  }
+  
+  .crypto-filters {
+    padding: 16px;
+  }
+  
+  .crypto-table-container {
+    border-radius: 12px;
+  }
+  
+  .crypto-table-header,
+  .crypto-table-row {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  /* Hide some columns on mobile */
+  .crypto-table-header .col-span-1:last-child,
+  .crypto-table-row .col-span-1:last-child {
+    display: none;
+  }
+  
+  .crypto-trending-card,
+  .crypto-gainer-card,
+  .crypto-loser-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .crypto-table-header .col-span-2:nth-child(5),
+  .crypto-table-row .col-span-2:nth-child(5) {
+    display: none;
+  }
+}
+
+/* Animation for cards */
+.crypto-trending-card,
+.crypto-gainer-card,
+.crypto-loser-card {
+  animation: slideInUp 0.5s ease-out forwards;
+}
+
+.crypto-trending-card:nth-child(1) { animation-delay: 0.1s; }
+.crypto-trending-card:nth-child(2) { animation-delay: 0.2s; }
+.crypto-trending-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Market indicators */
+.market-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.market-indicator.bullish {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.market-indicator.bearish {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.market-indicator.neutral {
+  background: rgba(156, 163, 175, 0.2);
+  color: #9ca3af;
+}
+
+/* Portfolio summary cards */
+.portfolio-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.portfolio-card {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 255, 255, 0.15);
+}
+
+/* Volume spike cards */
+.crypto-trending-card.border-purple-500\/30 {
+  border-color: rgba(147, 51, 234, 0.3);
+}
+
+.crypto-trending-card.border-purple-500\/30:hover {
+  border-color: rgba(147, 51, 234, 0.5);
+  box-shadow: 0 12px 24px rgba(147, 51, 234, 0.15);
+}
+
+/* Enhanced hover effects */
+.crypto-table-row:hover .crypto-action-btn {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.crypto-action-btn {
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .portfolio-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .portfolio-card {
+    padding: 16px;
+  }
 }

@@ -12,6 +12,7 @@ const Header = () => {
         <div className="hidden md:flex items-center space-x-8">
           <Link to="/" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Home</Link>
           <Link to="/about" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">About</Link>
+          <Link to="/overview" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Overview</Link>
           <Link to="/pricing" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Pricing</Link>
           <Link to="https://cryptolabs.zephyrboost.com/" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">News</Link>
           <Link to="/login" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Login</Link>
@@ -25,6 +26,7 @@ const Header = () => {
       <div id="menu" className="hidden md:hidden bg-light-bg dark:bg-dark-surface">
         <Link to="/" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Home</Link>
         <Link to="/about" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">About</Link>
+        <Link to="/overview" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Overview</Link>
         <Link to="/pricing" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Pricing</Link>
         <Link to="https://cryptolabs.zephyrboost.com/" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">News</Link>
         <Link to="/login" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Login</Link>

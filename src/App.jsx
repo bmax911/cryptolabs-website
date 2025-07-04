@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import PricingPage from './pages/PricingPage';
+import Overview from './pages/Overview';
+import CoinDetail from './pages/CoinDetail';
 // import AuthPage from './pages/AuthPage'; // REMOVED - This file does not exist and is no longer needed.
 import TermsOfUsePage from './pages/TermsOfUsePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
@@ -60,6 +62,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/overview" element={<Overview />} />
+          <Route path="/coin/:id" element={<CoinDetail />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/terms-of-use" element={<TermsOfUsePage />} />
