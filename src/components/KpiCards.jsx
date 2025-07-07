@@ -18,7 +18,8 @@ const CRYPTO_TRACKER_APP_URL = 'https://tracker.cryptolabs.cfd';
 const KpiCards = () => {
   const auth = useAuth(); // Get auth state
   const navigate = useNavigate(); // Get navigate function
-  const [isGeneratingToken, setIsGeneratingToken] = useState(false); // New state for loading
+  // Separate loading states for each button
+  const [loadingButton, setLoadingButton] = useState(null); // 'tracker' | 'research' | null
 
   // Safely destructure auth values with fallbacks
   const { isAuthenticated = () => false, token = null } = auth || {};
@@ -50,7 +51,7 @@ const KpiCards = () => {
         return;
     }
 
-    setIsGeneratingToken(true);
+    setLoadingButton('research');
     
     try {
       console.log('Exchanging Netlify token for session token...');
@@ -92,7 +93,7 @@ const KpiCards = () => {
         window.open(HEROKU_APP_URL, '_blank', 'noopener,noreferrer');
       }
     } finally {
-      setIsGeneratingToken(false);
+      setLoadingButton(null);
     }
   };
 
@@ -123,7 +124,7 @@ const KpiCards = () => {
         return;
     }
 
-    setIsGeneratingToken(true);
+    setLoadingButton('tracker');
     
     try {
       console.log('Exchanging Netlify token for session token...');
@@ -165,7 +166,7 @@ const KpiCards = () => {
         window.open(HEROKU_APP_URL, '_blank', 'noopener,noreferrer');
       }
     } finally {
-      setIsGeneratingToken(false);
+      setLoadingButton(null);
     }
   };
 
@@ -182,7 +183,7 @@ const KpiCards = () => {
       </div>
       <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer' }} onClick={handleTrackerAppClick}>
         <span className="kpi-icon"><FaChartBar /></span>
-        <span className="kpi-value">{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
+        <span className="kpi-value">{loadingButton === 'tracker' ? 'Loading...' : 'Launch'}</span>
         <span className="kpi-label">Crypto Tracker</span>
       </div>
       <div className="kpi-card kpi-neutral">
@@ -192,7 +193,7 @@ const KpiCards = () => {
       </div>
       <div className="kpi-card kpi-accent" style={{ cursor: 'pointer' }} onClick={handleResearchAnalysisClick}>
         <span className="kpi-icon"><FaChartLine /></span>
-        <span className="kpi-value">{isGeneratingToken ? 'Loading...' : 'Tools'}</span>
+        <span className="kpi-value">{loadingButton === 'research' ? 'Loading...' : 'Tools'}</span>
         <span className="kpi-label">Research Analysis</span>
       </div>
       <div className="kpi-card kpi-primary">
