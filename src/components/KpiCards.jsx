@@ -107,8 +107,28 @@ const KpiCards = () => {
     }
     setIsGeneratingToken(true);
     try {
+      // Decode Netlify JWT to extract email/sub/name
+      function decodeJWTPayload(token) {
+        if (!token) return null;
+        const parts = token.split('.');
+        if (parts.length !== 3) return null;
+        try {
+          const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+          const json = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+          return JSON.parse(json);
+        } catch (e) {
+          return null;
+        }
+      }
+      const payload = decodeJWTPayload(tokenToUse);
+
       const response = await axios.post('https://www.cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
-        netlify_token: tokenToUse
+        netlifyToken: tokenToUse,
+        email: payload && payload.email,
+        sub: payload && payload.sub,
+        name: payload && payload.name
       }, {
         headers: { 'Content-Type': 'application/json' },
         timeout: 10000
