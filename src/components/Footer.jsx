@@ -12,7 +12,14 @@ const Footer = () => {
             </Link>
             <p className="text-gray-600 dark:text-gray-400 text-sm">Empowering traders with AI-driven tools for a smarter financial future.</p>
           </div>
-          <div><h4 className="font-bold text-light-text dark:text-dark-text mb-4">Quick Links</h4><ul className="space-y-2"><li><a href="#hero" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Home</a></li><li><a href="#features" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Features</a></li><li><a href="#contact" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Contact</a></li></ul></div>
+          <div>
+            <h4 className="font-bold text-light-text dark:text-dark-text mb-4">Quick Links</h4>
+            <ul className="space-y-2">
+              <li><Link to="/about" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">About us</Link></li>
+              <li><a href="#features" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Features</a></li>
+              <li><a href="#contact" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Contact</a></li>
+            </ul>
+          </div>
           <div><h4 className="font-bold text-light-text dark:text-dark-text mb-4">Legal & Info</h4><ul className="space-y-2"><li><Link to="/privacy-policy" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Privacy Policy</Link></li><li><Link to="/terms-of-use" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Terms of Use</Link></li><li><Link to="/cookie-policy" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Cookie Policy</Link></li><li><Link to="/disclaimer" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 transition-colors">Disclaimer</Link></li></ul></div>
           <div>
             <h4 className="font-bold text-light-text dark:text-dark-text mb-4">Connect With Us</h4>
