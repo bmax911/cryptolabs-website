@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import axios
-import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot, FaChartBar } from 'react-icons/fa';
+import { FaMoneyBillWave, FaUser, FaChartLine, FaRobot, FaChartBar } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const kpis = [
   { icon: <FaMoneyBillWave />, label: 'Trading Fee Cashback', color: 'primary' },
-  { icon: <FaUserFriends />, label: 'Referral', color: 'accent' },
   { icon: <FaUser />, label: 'Profile', color: 'neutral' },
   { icon: <FaChartLine />, label: 'Research Analysis', color: 'accent' },
   { icon: <FaRobot />, label: 'AI Assistant', value: 'Active', color: 'primary' },
@@ -95,12 +94,20 @@ const KpiCards = () => {
     }
   };
 
+  // Helper to get Netlify JWT from widget or fallback
+  async function getNetlifyJWT() {
+    if (window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
+      return await window.netlifyIdentity.currentUser().token();
+    }
+    return localStorage.getItem('netlify_jwt');
+  }
+
   const handleCryptoTrackerClick = async () => {
     if (!isAuthenticated()) {
       alert('You need to be logged in to access the Crypto Tracker app.');
       return;
     }
-    const tokenToUse = token || localStorage.getItem('netlify_jwt');
+    const tokenToUse = await getNetlifyJWT();
     if (!tokenToUse || tokenToUse.trim() === '') {
       alert('Authentication token is missing. Please log in again.');
       return;
@@ -144,10 +151,11 @@ const KpiCards = () => {
         <span className="kpi-value">Contact Us</span>
         <span className="kpi-label">Trading Fee Cashback</span>
       </div>
-      <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer' }} onClick={handleCryptoTrackerClick}>
-        <span className="kpi-icon"><FaChartBar /></span>
-        <span className="kpi-value">{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
-        <span className="kpi-label">Crypto Tracker</span>
+      {/* Crypto Tracker Button */}
+      <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer', background: 'linear-gradient(90deg, #0ea5e9 0%, #06b6d4 100%)', color: '#fff', boxShadow: '0 4px 24px 0 rgba(6,182,212,0.15)' }} onClick={handleCryptoTrackerClick}>
+        <span className="kpi-icon" style={{ fontSize: 28 }}><FaChartBar /></span>
+        <span className="kpi-value" style={{ fontWeight: 600, fontSize: 18 }}>{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
+        <span className="kpi-label" style={{ fontWeight: 700, fontSize: 16 }}>Crypto Tracker</span>
       </div>
       <div className="kpi-card kpi-neutral">
         <span className="kpi-icon"><FaUser /></span>
