@@ -141,6 +141,7 @@ const KpiCards = () => {
         }
       }
       const payload = decodeJWTPayload(tokenToUse);
+      console.log('Decoded JWT payload:', payload);
       // Step 1: Exchange Netlify token for a backend session token, including email/sub/name
       const response = await axios.post('https://www.cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
         netlifyToken: tokenToUse,
