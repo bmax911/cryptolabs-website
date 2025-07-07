@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import axios
-import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot } from 'react-icons/fa';
+import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot, FaChartBar } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
@@ -95,6 +95,44 @@ const KpiCards = () => {
     }
   };
 
+  const handleCryptoTrackerClick = async () => {
+    if (!isAuthenticated()) {
+      alert('You need to be logged in to access the Crypto Tracker app.');
+      return;
+    }
+    const tokenToUse = token || localStorage.getItem('netlify_jwt');
+    if (!tokenToUse || tokenToUse.trim() === '') {
+      alert('Authentication token is missing. Please log in again.');
+      return;
+    }
+    setIsGeneratingToken(true);
+    try {
+      const response = await axios.post('https://www.cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
+        netlify_token: tokenToUse
+      }, {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 10000
+      });
+      if (response.data && response.data.session_token) {
+        const urlWithSessionToken = `https://tracker.cryptolabs.cfd?session_token=${encodeURIComponent(response.data.session_token)}`;
+        window.open(urlWithSessionToken, '_blank', 'noopener,noreferrer');
+      } else {
+        throw new Error('No session token received from backend');
+      }
+    } catch (err) {
+      if (err.response?.status === 401) {
+        alert('Authentication failed. Please log in again.');
+      } else if (err.response?.status === 403) {
+        alert('Access denied. Please contact support.');
+      } else {
+        alert('Token exchange failed. Trying direct access...');
+        window.open('https://tracker.cryptolabs.cfd', '_blank', 'noopener,noreferrer');
+      }
+    } finally {
+      setIsGeneratingToken(false);
+    }
+  };
+
   const handleCashbackClick = () => {
     navigate('/cashback-program');
   };
@@ -106,10 +144,10 @@ const KpiCards = () => {
         <span className="kpi-value">Contact Us</span>
         <span className="kpi-label">Trading Fee Cashback</span>
       </div>
-      <div className="kpi-card kpi-accent">
-        <span className="kpi-icon"><FaUserFriends /></span>
-        <span className="kpi-value">0</span>
-        <span className="kpi-label">Referral</span>
+      <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer', background: 'linear-gradient(90deg, #0ea5e9 0%, #06b6d4 100%)', color: '#fff', boxShadow: '0 4px 24px 0 rgba(6,182,212,0.15)' }} onClick={handleCryptoTrackerClick}>
+        <span className="kpi-icon" style={{ fontSize: 28 }}><FaChartBar /></span>
+        <span className="kpi-value" style={{ fontWeight: 600, fontSize: 18 }}>{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
+        <span className="kpi-label" style={{ fontWeight: 700, fontSize: 16 }}>Crypto Tracker</span>
       </div>
       <div className="kpi-card kpi-neutral">
         <span className="kpi-icon"><FaUser /></span>
