@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
@@ -18,13 +18,14 @@ import NewsRedirect from './components/NewsRedirect'; // Import the new componen
 import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
 import CashbackProgram from './components/CashbackProgram'; // Import the CashbackProgram component
 
+
 function App() {
+  const location = useLocation();
   useEffect(() => {
     const scrollElements = document.querySelectorAll('.scroll-animate');
 
     const elementInView = (el, dividend = 1) => {
       const elementTop = el.getBoundingClientRect().top;
-
       return (
         elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
       );
@@ -36,7 +37,7 @@ function App() {
 
     const hideScrollElement = (element) => {
       element.classList.remove('is-visible');
-    }
+    };
 
     const handleScrollAnimation = () => {
       scrollElements.forEach((el) => {
@@ -45,15 +46,17 @@ function App() {
         } else {
           hideScrollElement(el);
         }
-      })
-    }
+      });
+    };
 
     window.addEventListener('scroll', handleScrollAnimation);
+    // Trigger once on mount/route change
+    handleScrollAnimation();
 
     return () => {
       window.removeEventListener('scroll', handleScrollAnimation);
     };
-  }, []);
+  }, [location]);
 
   return (
     <div className="bg-light-bg text-light-text dark:bg-dark-bg dark:text-dark-text">
