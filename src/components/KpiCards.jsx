@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import axios
-import { FaMoneyBillWave, FaUser, FaChartLine, FaRobot, FaChartBar } from 'react-icons/fa';
+import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot, FaChartBar } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext'; // Import useAuth
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const kpis = [
   { icon: <FaMoneyBillWave />, label: 'Trading Fee Cashback', color: 'primary' },
+  { icon: <FaUserFriends />, label: 'Referral', color: 'accent' },
   { icon: <FaUser />, label: 'Profile', color: 'neutral' },
   { icon: <FaChartLine />, label: 'Research Analysis', color: 'accent' },
   { icon: <FaRobot />, label: 'AI Assistant', value: 'Active', color: 'primary' },
 ];
 
 const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
+const CRYPTO_TRACKER_APP_URL = 'https://tracker.cryptolabs.cfd';
 
 const KpiCards = () => {
   const auth = useAuth(); // Get auth state
@@ -94,46 +96,73 @@ const KpiCards = () => {
     }
   };
 
-  // Helper to get Netlify JWT from widget or fallback
-  async function getNetlifyJWT() {
-    if (window.netlifyIdentity && window.netlifyIdentity.currentUser()) {
-      return await window.netlifyIdentity.currentUser().token();
-    }
-    return localStorage.getItem('netlify_jwt');
-  }
-
-  const handleCryptoTrackerClick = async () => {
+  const handleTrackerAppClick = async () => {
+    console.log('=== RESEARCH ANALYSIS CLICK DEBUG ===');
+    console.log('Research Analysis clicked');
+    console.log('isAuthenticated:', isAuthenticated());
+    console.log('token exists:', token ? 'yes' : 'no');
+    console.log('token length:', token ? token.length : 'N/A');
+    console.log('token (first 50 chars):', token ? token.substring(0, 50) + '...' : 'missing');
+    
+    // Also check localStorage directly
+    const storedToken = localStorage.getItem('netlify_jwt');
+    console.log('localStorage token exists:', storedToken ? 'yes' : 'no');
+    console.log('localStorage token (first 50 chars):', storedToken ? storedToken.substring(0, 50) + '...' : 'missing');
+    
     if (!isAuthenticated()) {
-      alert('You need to be logged in to access the Crypto Tracker app.');
+      alert('You need to be logged in to access the Research Analysis app.');
       return;
     }
-    const tokenToUse = await getNetlifyJWT();
+
+    const tokenToUse = token || storedToken;
     if (!tokenToUse || tokenToUse.trim() === '') {
-      alert('Authentication token is missing. Please log in again.');
-      return;
+        console.error('Token is missing or empty');
+        console.error('Auth context token:', token);
+        console.error('localStorage token:', storedToken);
+        alert('Authentication token is missing. Please log in again.');
+        return;
     }
+
     setIsGeneratingToken(true);
+    
     try {
+      console.log('Exchanging Netlify token for session token...');
+      console.log('Using token (first 50 chars):', tokenToUse.substring(0, 50) + '...');
+      
+      // Step 1: Exchange Netlify token for a backend session token
       const response = await axios.post('https://www.cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
         netlify_token: tokenToUse
       }, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         timeout: 10000
       });
+
       if (response.data && response.data.session_token) {
-        const urlWithSessionToken = `https://tracker.cryptolabs.cfd?session_token=${encodeURIComponent(response.data.session_token)}`;
+        console.log('Successfully received session token');
+        
+        // Step 2: Open the Heroku app with the session token
+        const urlWithSessionToken = `${CRYPTO_TRACKER_APP_URL}?session_token=${encodeURIComponent(response.data.session_token)}`;
         window.open(urlWithSessionToken, '_blank', 'noopener,noreferrer');
       } else {
         throw new Error('No session token received from backend');
       }
+      
     } catch (err) {
+      console.error('Error with token exchange:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      
+      // Fallback: Try direct access for debugging
       if (err.response?.status === 401) {
         alert('Authentication failed. Please log in again.');
       } else if (err.response?.status === 403) {
         alert('Access denied. Please contact support.');
       } else {
+        console.log('Attempting direct access as fallback...');
         alert('Token exchange failed. Trying direct access...');
-        window.open('https://tracker.cryptolabs.cfd', '_blank', 'noopener,noreferrer');
+        window.open(HEROKU_APP_URL, '_blank', 'noopener,noreferrer');
       }
     } finally {
       setIsGeneratingToken(false);
@@ -151,11 +180,10 @@ const KpiCards = () => {
         <span className="kpi-value">Contact Us</span>
         <span className="kpi-label">Trading Fee Cashback</span>
       </div>
-      {/* Crypto Tracker Button */}
-      <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer', background: 'linear-gradient(90deg, #0ea5e9 0%, #06b6d4 100%)', color: '#fff', boxShadow: '0 4px 24px 0 rgba(6,182,212,0.15)' }} onClick={handleCryptoTrackerClick}>
-        <span className="kpi-icon" style={{ fontSize: 28 }}><FaChartBar /></span>
-        <span className="kpi-value" style={{ fontWeight: 600, fontSize: 18 }}>{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
-        <span className="kpi-label" style={{ fontWeight: 700, fontSize: 16 }}>Crypto Tracker</span>
+      <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer' }} onClick={handleTrackerAppClick}>
+        <span className="kpi-icon"><FaChartBar /></span>
+        <span className="kpi-value">{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
+        <span className="kpi-label">Crypto Tracker</span>
       </div>
       <div className="kpi-card kpi-neutral">
         <span className="kpi-icon"><FaUser /></span>
