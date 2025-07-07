@@ -144,10 +144,10 @@ const KpiCards = () => {
         <span className="kpi-value">Contact Us</span>
         <span className="kpi-label">Trading Fee Cashback</span>
       </div>
-      <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer', background: 'linear-gradient(90deg, #0ea5e9 0%, #06b6d4 100%)', color: '#fff', boxShadow: '0 4px 24px 0 rgba(6,182,212,0.15)' }} onClick={handleCryptoTrackerClick}>
-        <span className="kpi-icon" style={{ fontSize: 28 }}><FaChartBar /></span>
-        <span className="kpi-value" style={{ fontWeight: 600, fontSize: 18 }}>{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
-        <span className="kpi-label" style={{ fontWeight: 700, fontSize: 16 }}>Crypto Tracker</span>
+      <div className="kpi-card kpi-primary kpi-crypto-tracker" style={{ cursor: 'pointer' }} onClick={handleCryptoTrackerClick}>
+        <span className="kpi-icon"><FaChartBar /></span>
+        <span className="kpi-value">{isGeneratingToken ? 'Loading...' : 'Launch'}</span>
+        <span className="kpi-label">Crypto Tracker</span>
       </div>
       <div className="kpi-card kpi-neutral">
         <span className="kpi-icon"><FaUser /></span>
