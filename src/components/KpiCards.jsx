@@ -107,7 +107,7 @@ const KpiCards = () => {
     }
     setIsGeneratingToken(true);
     try {
-      const response = await axios.post('https://tracker.cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
+      const response = await axios.post('https://cryptolabs.cfd/api/auth/netlify-validate-and-generate', {
         netlify_token: tokenToUse
       }, {
         headers: { 'Content-Type': 'application/json' },
