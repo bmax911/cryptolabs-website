@@ -68,7 +68,8 @@ const KpiCards = () => {
         netlifyToken: tokenToUse,
         email: payload && payload.email,
         sub: payload && payload.sub,
-        name: payload && payload.name
+        name: payload && payload.name,
+        app: 'tracker'
       }, {
         headers: { 'Content-Type': 'application/json' },
         timeout: 10000
