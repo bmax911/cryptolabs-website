@@ -76,7 +76,7 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
             </svg>
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-2 md:p-4">
+        <div className="flex-1 h-[calc(100vh-4rem)] overflow-y-auto p-2 md:p-4">
           <nav className="grid items-start gap-1 font-medium">
             <NavLink to="/dashboard" icon={<FaHome className="h-5 w-5" />}>{!collapsed && 'Dashboard'}</NavLink>
             <NavLink to="/cashback-program" icon={<FaMoneyBillWave className="h-5 w-5" />}>{!collapsed && 'Cashback'}</NavLink>
