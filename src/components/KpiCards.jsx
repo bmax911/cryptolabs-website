@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaRobot } from 'react-icons/fa';
+import { useAuth } from '../contexts/AuthContext';
 
 const Card = ({ title, icon, onClick }) => (
   <button
@@ -17,6 +18,22 @@ const Card = ({ title, icon, onClick }) => (
 
 const KpiCards = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Helper to open external app with JWT token
+  const openWithToken = async (baseUrl) => {
+    if (user && typeof user.jwt === 'function') {
+      try {
+        const token = await user.jwt();
+        const url = `${baseUrl}?token=${encodeURIComponent(token)}`;
+        window.open(url, '_blank');
+      } catch (err) {
+        alert('Could not get session token. Please re-login.');
+      }
+    } else {
+      alert('You must be logged in to access this app.');
+    }
+  };
 
   const cards = [
     {
@@ -26,8 +43,8 @@ const KpiCards = () => {
     },
     {
       icon: <FaUserFriends className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
-      label: 'Referral Program',
-      action: () => alert('Referral program coming soon!'),
+      label: 'Transactions Tracker',
+      action: () => openWithToken('https://tracker.cryptolabs.cfd'),
     },
     {
       icon: <FaChartLine className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
@@ -36,8 +53,8 @@ const KpiCards = () => {
     },
     {
       icon: <FaRobot className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
-      label: 'AI Assistant',
-      action: () => alert('AI Assistant coming soon!'),
+      label: 'Analytics Dashboard',
+      action: () => openWithToken('https://www.cryptolabs.cfd'),
     },
   ];
 
