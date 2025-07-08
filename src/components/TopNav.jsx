@@ -6,7 +6,7 @@ import { FaUserCircle, FaBars } from 'react-icons/fa';
 import Logo from './Logo';
 
 const TopNav = ({ user, onMenuClick }) => (
-  <header className="flex h-16 items-center gap-4 border-b bg-white px-4 dark:bg-slate-950 md:px-6">
+  <header className="fixed top-0 left-0 w-full z-50 flex h-16 items-center gap-4 border-b bg-white px-4 dark:bg-slate-950 md:px-6 shadow">
     {/* Hamburger for mobile */}
     <button
       className="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
