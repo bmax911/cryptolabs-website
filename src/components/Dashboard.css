@@ -4,19 +4,21 @@ from { opacity: 0; transform: translateY(20px); }
 to { opacity: 1; transform: translateY(0); }
 }
 /* === Custom Fonts === */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@500;700&family=Montserrat:wght@400;600&display=swap');
 body, .dashboard-container {
-font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
-letter-spacing: 0.01em;
+  font-family: 'Inter', 'Orbitron', 'Montserrat', Arial, sans-serif;
+  letter-spacing: 0.01em;
+  background: #0f172a;
+  color: #e2e8f0;
 }
 .dashboard-container {
-display: flex;
-flex-direction: column;
-min-height: 100vh;
-background-color: #0f172a; /* dark-bg */
-justify-content: center;
-align-items: center;
-padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #0f172a 0%, #1e293b 100%);
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
 /* === Motion Background (Animated Gradient + Subtle Particles) === */
 .animated-gradient-background {
@@ -34,10 +36,6 @@ overflow: hidden;
 100% { background-position: 0% 50%; }
 }
 /* === Glassmorphism Card === */
-.dashboard-card {
-animation: fadeIn 0.8s ease-out forwards;
-background: rgba(30, 41, 59, 0.75);
-box-shadow: 0 8px 32px 0 rgba(0,255,255,0.12), 0 1.5px 8px 0 rgba(0,0,0,0.18);
 border-radius: 1.5rem;
 border: 1.5px solid rgba(0,255,255,0.12);
 backdrop-filter: blur(18px) saturate(120%);
@@ -48,23 +46,59 @@ text-align: center;
 transition: box-shadow 0.3s, border 0.3s;
 position: relative;
 z-index: 1;
+border: 1.5px solid #00fff7;
+/* Glassmorphism Card, HomePage style */
+.dashboard-card {
+  animation: fadeIn 0.8s ease-out forwards;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0,255,255,0.12), 0 1.5px 8px 0 rgba(0,0,0,0.18);
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 540px;
+  margin: 2rem auto;
+  text-align: center;
+  transition: box-shadow 0.3s, border 0.3s, transform 0.3s;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
 }
 .dashboard-card:hover {
-box-shadow: 0 0 32px 0 #00fff7, 0 1.5px 8px 0 rgba(0,0,0,0.18);
-border: 1.5px solid #00fff7;
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 255, 255, 0.15);
+  border-color: rgba(0, 255, 255, 0.3);
+}
+.dashboard-card:hover::before {
+  opacity: 1;
 }
 .dashboard-card h1 {
-font-size: 2.5rem;
-font-weight: 700;
-color: #fff;
-margin-bottom: 0.5rem;
-text-shadow: 0 0 12px #00fff7, 0 0 2px #0ff;
-letter-spacing: 0.04em;
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 12px #00fff7, 0 0 2px #0ff;
 }
 .dashboard-card p {
-color: #b5eaff;
-margin-bottom: 2rem;
-font-size: 1.1rem;
+  color: #b5eaff;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
 }
 /* === Weather Widget (Decorative, Animated) === */
 .weather-decoration {
@@ -164,26 +198,27 @@ flex-direction: column;
 align-items: center;
 gap: 0.7rem;
 }
-.app-link {
-color: #00fff7;
-font-size: 1.2rem;
-font-weight: 600;
-text-shadow: 0 0 8px #00fff7;
-background: rgba(0,255,255,0.08);
 border-radius: 1rem;
 padding: 0.5rem 1.2rem;
-transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-box-shadow: 0 0 12px #00fff7;
-margin-bottom: 0.5rem;
+/* CTA Button, HomePage style */
+.app-link {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #00ffff, #0066ff);
+  border-radius: 1rem;
+  padding: 0.5rem 1.2rem;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 12px #00fff7;
+  margin-bottom: 0.5rem;
+  border: none;
+  text-shadow: 0 0 8px #00fff7;
 }
 .app-link:hover {
-background: #00fff7;
-color: #0f172a;
-box-shadow: 0 0 24px #00fff7;
+  background: linear-gradient(135deg, #0066ff, #00ffff);
+  color: #0f172a;
+  box-shadow: 0 0 24px #00fff7;
 }
-.copy-btn {
-background: #00fff7;
-color: #0f172a;
 border: none;
 border-radius: 9999px;
 padding: 0.4rem 1.2rem;
@@ -192,11 +227,23 @@ font-size: 1rem;
 cursor: pointer;
 box-shadow: 0 0 8px #00fff7;
 transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+/* Neon Button, HomePage style */
+.copy-btn {
+  background: linear-gradient(135deg, #00ffff, #0066ff);
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.4rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 8px #00fff7;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .copy-btn:hover {
-background: #0f172a;
-color: #00fff7;
-box-shadow: 0 0 16px #00fff7;
+  background: linear-gradient(135deg, #0066ff, #00ffff);
+  color: #0f172a;
+  box-shadow: 0 0 16px #00fff7;
 }
 /* === Crypto Section (Minimalist Cards, Animated) === */
 .crypto-section {
