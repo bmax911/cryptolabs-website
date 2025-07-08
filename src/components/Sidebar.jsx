@@ -27,6 +27,7 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
 
   // Sidebar width classes
   const sidebarWidth = collapsed ? 'w-16 md:w-16 lg:w-20' : 'w-64 md:w-[220px] lg:w-[280px]';
+  // Only animate slide for mobile (md:hidden), always static on desktop
   const sidebarTranslate = open ? 'translate-x-0' : '-translate-x-full';
 
   return (
@@ -39,7 +40,7 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
       {/* Sidebar */}
       <aside
         className={`fixed z-50 top-0 left-0 h-full bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 shadow-xl
-          transition-transform duration-500 ease-out will-change-transform
+          transition-all duration-500 ease-out will-change-transform
           ${sidebarWidth} ${sidebarTranslate}
           md:static md:translate-x-0 md:block`}
         style={{ boxShadow: open ? '0 8px 32px 0 rgba(31, 38, 135, 0.37)' : 'none' }}
@@ -79,10 +80,10 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
         </div>
         <div className="flex-1 overflow-y-auto p-2 md:p-4">
           <nav className="grid items-start gap-1 font-medium">
-            <NavLink to="/dashboard" icon={<FaHome className="h-5 w-5 mx-auto" />}>{!collapsed && 'Dashboard'}</NavLink>
-            <NavLink to="/cashback-program" icon={<FaMoneyBillWave className="h-5 w-5 mx-auto" />}>{!collapsed && 'Cashback'}</NavLink>
-            <NavLink to="/profile" icon={<FaUser className="h-5 w-5 mx-auto" />}>{!collapsed && 'Profile'}</NavLink>
-            <NavLink to="/research" icon={<FaChartLine className="h-5 w-5 mx-auto" />}>{!collapsed && 'Research'}</NavLink>
+            <NavLink to="/dashboard" icon={<FaHome className="h-5 w-5" />}>{!collapsed && 'Dashboard'}</NavLink>
+            <NavLink to="/cashback-program" icon={<FaMoneyBillWave className="h-5 w-5" />}>{!collapsed && 'Cashback'}</NavLink>
+            <NavLink to="/profile" icon={<FaUser className="h-5 w-5" />}>{!collapsed && 'Profile'}</NavLink>
+            <NavLink to="/research" icon={<FaChartLine className="h-5 w-5" />}>{!collapsed && 'Research'}</NavLink>
           </nav>
         </div>
         <div className="mt-auto p-2 md:p-4">
