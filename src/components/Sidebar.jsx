@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaHome, FaMoneyBillWave, FaUserFriends, FaUser, FaChartLine, FaSignOutAlt } from 'react-icons/fa';
-import Logo from './Logo';
+// import Logo from './Logo';
 import { Link, useLocation } from 'react-router-dom';
 
 const NavLink = ({ to, icon, children }) => {
@@ -47,7 +47,7 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
       >
         <div className="flex h-16 items-center border-b px-2 md:px-4 lg:px-6 justify-between">
           <div className="flex items-center gap-2">
-            {/* Logo moved to TopNav */}
+            {/* Logo removed from Sidebar */}
           </div>
           {/* Close button (mobile) */}
           <button
