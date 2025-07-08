@@ -12,11 +12,16 @@ exports.handler = async function(event) {
     };
   }
 
+
   // Build FRED API URL
   const url = new URL(`${FRED_BASE_URL}/${endpoint}`);
-  url.searchParams.set('api_key', FRED_API_KEY);
-  url.searchParams.set('file_type', 'json');
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  // Always ensure api_key and file_type=json are LAST in the query string
+  url.searchParams.delete('api_key');
+  url.searchParams.delete('file_type');
+  url.searchParams.append('api_key', FRED_API_KEY);
+  url.searchParams.append('file_type', 'json');
+  console.log('FRED API URL:', url.toString());
 
   try {
     const res = await fetch(url.toString());
