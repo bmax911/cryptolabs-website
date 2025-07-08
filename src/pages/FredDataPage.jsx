@@ -23,8 +23,21 @@ const FredDataPage = () => {
   useEffect(() => {
     setLoading(true);
     fetchFred('releases')
-      .then(data => setReleases(data.releases || []))
-      .catch(() => setError('Failed to load releases'))
+      .then(data => {
+        console.log('FRED releases response:', data);
+        if (data.error) {
+          setError(`FRED API error: ${data.error}`);
+          setReleases([]);
+        } else if (Array.isArray(data.releases)) {
+          setReleases(data.releases);
+        } else {
+          setError('Unexpected response structure');
+          setReleases([]);
+        }
+      })
+      .catch(err => {
+        setError('Failed to load releases: ' + err.message);
+      })
       .finally(() => setLoading(false));
   }, []);
 
