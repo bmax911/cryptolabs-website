@@ -34,9 +34,9 @@ const DashboardTable = () => {
   const buttonClass = "rounded bg-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-300 disabled:opacity-50 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600";
 
   return (
-    <div className="rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-900 dark:border-slate-800">
+    <div className="rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-900 dark:border-slate-800 text-black dark:text-white">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold">Recent Transactions</h2>
+        <h2 className="text-xl font-bold text-black dark:text-white">Recent Transactions</h2>
         <input
           type="text"
           placeholder="Filter..."

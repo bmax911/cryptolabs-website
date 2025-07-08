@@ -70,10 +70,10 @@ const DashboardCharts = () => {
   const selectClass = "w-full rounded-md border-slate-300 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800 focus:border-blue-500 focus:ring-blue-500 sm:text-sm";
 
   return (
-    <div className="rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-900 dark:border-slate-800">
-      <h2 className="text-xl font-bold mb-4">Economic Indicators</h2>
+    <div className="rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-900 dark:border-slate-800 text-black dark:text-white">
+      <h2 className="text-xl font-bold mb-4 text-black dark:text-white">Economic Indicators</h2>
       {/* Controls */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6 text-black dark:text-white">
           <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Country</label>
               <select value={country} onChange={e => setCountry(e.target.value)} className={selectClass}>
@@ -95,7 +95,7 @@ const DashboardCharts = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 text-black dark:text-white">
         <ChartContainer title={INDICATORS.find(i => i.value === lineIndicator)?.label} loading={loading} error={error}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={lineData}>
