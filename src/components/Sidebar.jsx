@@ -17,11 +17,22 @@ const NavLink = ({ to, icon, children }) => {
   );
 };
 
-const Sidebar = ({ onLogout }) => (
-  <aside className="hidden border-r bg-white dark:bg-slate-950 md:block">
-    <div className="flex h-full max-h-screen flex-col gap-2">
+
+const Sidebar = ({ onLogout, open, setOpen }) => (
+  <>
+    {/* Overlay for mobile */}
+    <div
+      className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 md:hidden ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      onClick={() => setOpen(false)}
+    />
+    {/* Sidebar */}
+    <aside
+      className={`fixed z-50 top-0 left-0 h-full w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-out
+        ${open ? 'translate-x-0' : '-translate-x-full'}
+        md:static md:translate-x-0 md:w-[220px] lg:w-[280px] md:block`}
+    >
       <div className="flex h-16 items-center border-b px-6">
-        <Link to="/" aria-label="Home">
+        <Link to="/" aria-label="Home" onClick={() => setOpen(false)}>
           <Logo />
         </Link>
       </div>
@@ -42,8 +53,8 @@ const Sidebar = ({ onLogout }) => (
            Logout
          </button>
       </div>
-    </div>
-  </aside>
+    </aside>
+  </>
 );
 
 export default Sidebar;

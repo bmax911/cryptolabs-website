@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Sidebar from './Sidebar';
 import TopNav from './TopNav';
@@ -13,11 +13,14 @@ const Dashboard = () => {
     logout();
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <Sidebar onLogout={handleLogout} />
-      <div className="flex flex-col">
-        <TopNav user={user} />
+    <div className="min-h-screen w-full flex">
+      {/* Sidebar: slider for mobile, static for md+ */}
+      <Sidebar onLogout={handleLogout} open={sidebarOpen} setOpen={setSidebarOpen} />
+      <div className="flex-1 flex flex-col">
+        <TopNav user={user} onMenuClick={() => setSidebarOpen(true)} />
         <main className="flex-1 overflow-y-auto bg-slate-100/50 p-4 dark:bg-slate-900/50 sm:p-6">
           <KpiCards />
           <div className="mt-6">
