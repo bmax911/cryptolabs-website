@@ -84,16 +84,14 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
             <NavLink to="/cashback-program" icon={<FaMoneyBillWave className="h-5 w-5" />}>{!collapsed && 'Cashback'}</NavLink>
             <NavLink to="/profile" icon={<FaUser className="h-5 w-5" />}>{!collapsed && 'Profile'}</NavLink>
             <NavLink to="/research" icon={<FaChartLine className="h-5 w-5" />}>{!collapsed && 'Research'}</NavLink>
-          </nav>
-        </div>
-        <div className="mt-auto p-2 md:p-4">
-           <button
+            <button
               onClick={onLogout}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-slate-700 transition-all hover:bg-red-100 hover:text-red-700 dark:text-slate-300 dark:hover:bg-red-900/50 dark:hover:text-red-400 justify-center md:justify-start"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-slate-700 transition-all hover:bg-red-100 hover:text-red-700 dark:text-slate-300 dark:hover:bg-red-900/50 dark:hover:text-red-400 justify-center md:justify-start mt-2"
             >
-             <FaSignOutAlt className="h-5 w-5" />
-             {!collapsed && 'Logout'}
-           </button>
+              <FaSignOutAlt className="h-5 w-5" />
+              {!collapsed && 'Logout'}
+            </button>
+          </nav>
         </div>
       </aside>
     </>
