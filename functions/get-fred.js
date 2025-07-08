@@ -24,6 +24,16 @@ exports.handler = async function(event) {
       return { statusCode: res.status, body: JSON.stringify({ error: 'FRED API error' }) };
     }
     const data = await res.json();
+
+    // Patch for FRED API: always return arrays for releases and series
+    // (for endpoints: releases, release/series, etc.)
+    if (endpoint === 'releases' && !Array.isArray(data.releases)) {
+      data.releases = [];
+    }
+    if (endpoint === 'release/series' && !Array.isArray(data.seriess)) {
+      data.seriess = [];
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify(data),
