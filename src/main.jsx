@@ -1,18 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { ThemeProvider } from './contexts/ThemeContext.jsx';
-import { AuthProvider } from './contexts/AuthContext.jsx'; // Import AuthProvider
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './contexts/theme.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-      <ThemeProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </ThemeProvider>
+    <App />
   </React.StrictMode>
 );

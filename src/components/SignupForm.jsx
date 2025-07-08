@@ -1,45 +1,39 @@
-// src/components/SignupForm.jsx
-
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import './SignupForm.css';
 
 const SignupForm = () => {
   const navigate = useNavigate();
-  const { signup, user } = useAuth();
+  const { signup, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    // If the user is logged in after an action, redirect to the dashboard.
-    if (user) {
+    if (isAuthenticated()) {
       navigate('/dashboard');
     }
-  }, [user, navigate]);
-
-  const handleSignup = () => {
-    signup(); // This opens the Netlify Identity widget
-  };
+  }, [isAuthenticated, navigate]);
 
   return (
-    <div className="signup-container">
-      <div className="animated-gradient-background"></div>
-      <div className="signup-card">
-        <h2>Create Your Account</h2>
-        <p className="signup-subtitle">Join us to access exclusive financial insights.</p>
+    <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight">
+          Create Your Account
+        </h2>
+        <p className="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
+          Already have an account?{' '}
+          <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+            Log In
+          </Link>
+        </p>
+      </div>
 
-        <div className="social-signup-container">
-          <button onClick={handleSignup} className="btn-primary-full">
-            Sign Up with Email
-          </button>
-        </div>
-
-        <div className="login-link-container">
-          <p>
-            Already have an account?{' '}
-            <Link to="/login" className="login-link">
-              Log In
-            </Link>
-          </p>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="rounded-lg border bg-white px-4 py-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-10">
+           <button
+              onClick={signup}
+              className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+            >
+              Sign Up with Email
+            </button>
         </div>
       </div>
     </div>

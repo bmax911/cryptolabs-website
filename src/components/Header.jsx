@@ -1,36 +1,111 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import ThemeToggleButton from './ThemeToggleButton';
+import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/solid';
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: '/overview', label: 'Overview' },
+    { href: '/pricing', label: 'Pricing' },
+    { href: 'https://cryptolabs.zephyrboost.com/', label: 'News', external: true },
+  ];
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-light-bg/80 dark:bg-dark-surface/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800/50">
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center" aria-label="CryptoLabs Home">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-lg dark:border-slate-800/80 dark:bg-slate-900/80">
+      <nav className="container mx-auto flex h-16 items-center justify-between">
+        <Link to="/" aria-label="CryptoLabs Home">
           <Logo />
         </Link>
-        <div className="hidden md:flex items-center space-x-8">
-          <Link to="/overview" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Overview</Link>
-          <Link to="/pricing" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Pricing</Link>
-          <Link to="https://cryptolabs.zephyrboost.com/" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">News</Link>
-          <Link to="/login" className="text-light-text dark:text-dark-text hover:text-primary dark:hover:text-cyan-400 transition-colors">Login</Link>
-          <Link to="/signup" className="bg-primary hover:bg-cyan-600 text-white font-bold py-2 px-5 rounded-full transition-all duration-300">Sign Up</Link>
+        <div className="hidden items-center space-x-6 md:flex">
+          {navLinks.map((link) => (
+            link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.label}
+                to={link.href}
+                className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
+              >
+                {link.label}
+              </Link>
+            )
+          ))}
+        </div>
+        <div className="hidden items-center space-x-4 md:flex">
+          <Link
+            to="/login"
+            className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
+          >
+            Login
+          </Link>
+          <Link
+            to="/signup"
+            className="inline-flex h-9 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-blue-700"
+          >
+            Sign Up
+          </Link>
           <ThemeToggleButton />
         </div>
-        <button id="menu-btn" className="md:hidden focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-light-text dark:text-dark-text" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+        <button
+          className="md:hidden"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {isMenuOpen ? (
+            <XMarkIcon className="h-6 w-6" />
+          ) : (
+            <Bars3Icon className="h-6 w-6" />
+          )}
         </button>
       </nav>
-      <div id="menu" className="hidden md:hidden bg-light-bg dark:bg-dark-surface">
-        <Link to="/overview" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Overview</Link>
-        <Link to="/pricing" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Pricing</Link>
-        <Link to="https://cryptolabs.zephyrboost.com/" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">News</Link>
-        <Link to="/login" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Login</Link>
-        <Link to="/signup" className="block py-2 px-6 text-sm text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-800">Sign Up</Link>
-        <div className="px-6 py-2">
-          <ThemeToggleButton />
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden">
+          <div className="container space-y-4 py-4">
+            {navLinks.map((link) => (
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-slate-600 dark:text-slate-400"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="block text-slate-600 dark:text-slate-400"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            ))}
+            <div className="flex flex-col space-y-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+              <Link to="/login" className="text-slate-600 dark:text-slate-400" onClick={() => setIsMenuOpen(false)}>Login</Link>
+              <Link to="/signup" className="rounded-md bg-blue-600 px-4 py-2 text-center text-white" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+              <div className="self-start">
+                 <ThemeToggleButton />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 };

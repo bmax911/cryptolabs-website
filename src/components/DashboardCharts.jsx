@@ -6,146 +6,122 @@ const INDICATORS = [
   { value: 'NY.GDP.MKTP.CD', label: 'GDP (current US$)' },
   { value: 'SP.POP.TOTL', label: 'Population' },
   { value: 'FP.CPI.TOTL', label: 'Consumer Price Index' },
-  { value: 'NE.EXP.GNFS.CD', label: 'Exports of goods and services (current US$)' },
-  { value: 'NE.IMP.GNFS.CD', label: 'Imports of goods and services (current US$)' },
 ];
 const COUNTRIES = [
   { value: 'US', label: 'United States' },
   { value: 'CN', label: 'China' },
   { value: 'JP', label: 'Japan' },
   { value: 'DE', label: 'Germany' },
-  { value: 'IN', label: 'India' },
-  { value: 'GB', label: 'United Kingdom' },
-  { value: 'FR', label: 'France' },
 ];
 
-
-const DashboardCharts = () => {
-  const [lineIndicator, setLineIndicator] = useState('NY.GDP.MKTP.CD');
-  const [barIndicator, setBarIndicator] = useState('SP.POP.TOTL');
-  const [country, setCountry] = useState('US');
-  const [start, setStart] = useState(2012);
-  const [end, setEnd] = useState(2022);
-  const [lineData, setLineData] = useState([]);
-  const [barData, setBarData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    Promise.all([
-      fetchWorldBankData({ indicator: lineIndicator, country, start, end }),
-      fetchWorldBankData({ indicator: barIndicator, country, start, end })
-    ])
-      .then(([line, bar]) => {
-        setLineData(line);
-        setBarData(bar);
-      })
-      .catch(() => setError('Failed to load World Bank data'))
-      .finally(() => setLoading(false));
-  }, [lineIndicator, barIndicator, country, start, end]);
-
-  return (
-    <div className="dashboard-charts dashboard-charts-large">
-      <div className="chart-controls glassmorphism-card">
-        <div className="chart-control-group">
-          <label htmlFor="country-select">Country:</label>
-          <select id="country-select" value={country} onChange={e => setCountry(e.target.value)} aria-label="Select country">
-            {COUNTRIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-          </select>
-        </div>
-        <div className="chart-control-group">
-          <label htmlFor="line-indicator-select">Line Chart:</label>
-          <select id="line-indicator-select" value={lineIndicator} onChange={e => setLineIndicator(e.target.value)} aria-label="Select line chart indicator">
-            {INDICATORS.map(i => <option key={i.value} value={i.value}>{i.label}</option>)}
-          </select>
-        </div>
-        <div className="chart-control-group">
-          <label htmlFor="bar-indicator-select">Bar Chart:</label>
-          <select id="bar-indicator-select" value={barIndicator} onChange={e => setBarIndicator(e.target.value)} aria-label="Select bar chart indicator">
-            {INDICATORS.map(i => <option key={i.value} value={i.value}>{i.label}</option>)}
-          </select>
-        </div>
-        <div className="chart-control-group">
-          <label htmlFor="year-range-start">Year Range:</label>
-          <input id="year-range-start" type="number" min="1960" max={end} value={start} onChange={e => setStart(Number(e.target.value))} style={{ width: 70 }} aria-label="Start year" />
-          <span> - </span>
-          <input id="year-range-end" type="number" min={start} max={new Date().getFullYear()} value={end} onChange={e => setEnd(Number(e.target.value))} style={{ width: 70 }} aria-label="End year" />
-        </div>
-      </div>
-      <div className="charts-row">
-        <div className="chart-placeholder chart-large">
-          {loading ? 'Loading Line Chart...' : error ? error : (
-            <>
-              <RechartsLineChart data={lineData} indicator={lineIndicator} />
-              <div className="chart-alt-desc">
-                <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === lineIndicator)?.label} ({start}–{end}):</strong>
-                This line chart visualizes the selected indicator for the chosen country and year range, sourced from the World Bank. Each point represents the value for a given year.
-              </div>
-            </>
-          )}
-        </div>
-        <div className="chart-placeholder chart-large">
-          {loading ? 'Loading Bar Chart...' : error ? error : (
-            <>
-              <RechartsBarChart data={barData} indicator={barIndicator} />
-              <div className="chart-alt-desc">
-                <strong>{COUNTRIES.find(c => c.value === country)?.label} {INDICATORS.find(i => i.value === barIndicator)?.label} ({start}–{end}):</strong>
-                This bar chart shows the selected indicator for the chosen country and year range, as reported by the World Bank.
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+const ChartContainer = ({ title, children, loading, error }) => (
+  <div className="rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-900 dark:border-slate-800">
+    <h3 className="mb-4 font-semibold">{title}</h3>
+    <div className="h-72">
+      {loading ? <div className="flex h-full items-center justify-center text-slate-500">Loading...</div> :
+       error ? <div className="flex h-full items-center justify-center text-red-500">{error}</div> :
+       children
+      }
     </div>
-  );
-};
+  </div>
+);
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tooltip" style={{ backgroundColor: 'rgba(30, 41, 59, 0.9)', padding: '10px', border: '1px solid #00e6d6', borderRadius: '5px' }}>
-        <p className="label">{`Year: ${label}`}</p>
-        <p className="intro">{`Value: ${payload[0].value.toLocaleString()}`}</p>
+      <div className="rounded-md border bg-white/80 p-2 text-sm shadow-lg backdrop-blur dark:bg-slate-900/80 dark:border-slate-700">
+        <p className="font-bold">{label}</p>
+        <p className="text-slate-600 dark:text-slate-400">{`${payload[0].name}: ${payload[0].value.toLocaleString()}`}</p>
       </div>
     );
   }
   return null;
 };
 
-function RechartsLineChart({ data, indicator }) {
-  if (!data || data.length === 0) return <span>No data available for the selected criteria.</span>;
+const DashboardCharts = () => {
+  const [lineIndicator, setLineIndicator] = useState('NY.GDP.MKTP.CD');
+  const [barIndicator, setBarIndicator] = useState('SP.POP.TOTL');
+  const [country, setCountry] = useState('US');
+  const [lineData, setLineData] = useState([]);
+  const [barData, setBarData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [line, bar] = await Promise.all([
+          fetchWorldBankData({ indicator: lineIndicator, country }),
+          fetchWorldBankData({ indicator: barIndicator, country })
+        ]);
+        setLineData(line);
+        setBarData(bar);
+      } catch (err) {
+        setError('Failed to load chart data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [lineIndicator, barIndicator, country]);
+
+  const selectClass = "w-full rounded-md border-slate-300 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800 focus:border-blue-500 focus:ring-blue-500 sm:text-sm";
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(0, 255, 255, 0.2)" />
-        <XAxis dataKey="year" stroke="#b5eaff" />
-        <YAxis stroke="#b5eaff" tickFormatter={(value) => new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(value)} />
-        <Tooltip content={<CustomTooltip />} />
-        <Legend wrapperStyle={{ color: '#fff' }} />
-        <Line type="monotone" dataKey="value" name={INDICATORS.find(i => i.value === indicator)?.label || 'Value'} stroke="#00e6d6" strokeWidth={2} activeDot={{ r: 8 }} />
-      </LineChart>
-    </ResponsiveContainer>
-  );
-}
+    <div className="rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-900 dark:border-slate-800">
+      <h2 className="text-xl font-bold mb-4">Economic Indicators</h2>
+      {/* Controls */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+          <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Country</label>
+              <select value={country} onChange={e => setCountry(e.target.value)} className={selectClass}>
+                {COUNTRIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+              </select>
+          </div>
+          <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Line Chart</label>
+              <select value={lineIndicator} onChange={e => setLineIndicator(e.target.value)} className={selectClass}>
+                {INDICATORS.map(i => <option key={i.value} value={i.value}>{i.label}</option>)}
+              </select>
+          </div>
+          <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Bar Chart</label>
+              <select value={barIndicator} onChange={e => setBarIndicator(e.target.value)} className={selectClass}>
+                {INDICATORS.map(i => <option key={i.value} value={i.value}>{i.label}</option>)}
+              </select>
+          </div>
+      </div>
 
-function RechartsBarChart({ data, indicator }) {
-  if (!data || data.length === 0) return <span>No data available for the selected criteria.</span>;
-
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data} margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(0, 255, 255, 0.2)" />
-        <XAxis dataKey="year" stroke="#b5eaff" />
-        <YAxis stroke="#b5eaff" tickFormatter={(value) => new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(value)} />
-        <Tooltip content={<CustomTooltip />} />
-        <Legend wrapperStyle={{ color: '#fff' }} />
-        <Bar dataKey="value" name={INDICATORS.find(i => i.value === indicator)?.label || 'Value'} fill="#00e6d6" />
-      </BarChart>
-    </ResponsiveContainer>
+      {/* Charts */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <ChartContainer title={INDICATORS.find(i => i.value === lineIndicator)?.label} loading={loading} error={error}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={lineData}>
+                <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+                <XAxis dataKey="year" stroke="hsl(var(--foreground) / 0.5)" fontSize={12} />
+                <YAxis stroke="hsl(var(--foreground) / 0.5)" fontSize={12} tickFormatter={(value) => new Intl.NumberFormat('en-US', { notation: 'compact' }).format(value)} />
+                <Tooltip content={<CustomTooltip />} />
+                <Line type="monotone" dataKey="value" name={INDICATORS.find(i => i.value === lineIndicator)?.label} stroke="#3b82f6" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+        </ChartContainer>
+        
+        <ChartContainer title={INDICATORS.find(i => i.value === barIndicator)?.label} loading={loading} error={error}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={barData}>
+                <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+                <XAxis dataKey="year" stroke="hsl(var(--foreground) / 0.5)" fontSize={12} />
+                <YAxis stroke="hsl(var(--foreground) / 0.5)" fontSize={12} tickFormatter={(value) => new Intl.NumberFormat('en-US', { notation: 'compact' }).format(value)} />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar dataKey="value" name={INDICATORS.find(i => i.value === barIndicator)?.label} fill="#3b82f6" />
+              </BarChart>
+            </ResponsiveContainer>
+        </ChartContainer>
+      </div>
+    </div>
   );
-}
+};
 
 export default DashboardCharts;

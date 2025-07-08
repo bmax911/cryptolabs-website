@@ -1,93 +1,32 @@
-// src/components/Dashboard.jsx
-
-import React, { useEffect, useState } from 'react';
-import './Dashboard.css'; // Import the new CSS
+import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import labIcon from '../../lab-icon.svg';
-import btcIcon from '../../btc.svg';
-import ethIcon from '../../eth.svg';
-import solanaIcon from '../../solana.svg';
 import Sidebar from './Sidebar';
 import TopNav from './TopNav';
 import KpiCards from './KpiCards';
-import WeatherWidget from './WeatherWidget';
-import NotificationBar from './NotificationBar';
 import DashboardCharts from './DashboardCharts';
 import DashboardTable from './DashboardTable';
-import ThemeToggleButton from './ThemeToggleButton';
-
-const HEROKU_APP_URL = 'https://www.cryptolabs.cfd/';
-
-const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY || import.meta.env.WEATHER_API_KEY;
-
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
-  const [weather, setWeather] = useState(null);
-  const [showWeather, setShowWeather] = useState(false);
-  const [cryptoData, setCryptoData] = useState(null);
-  const [cryptoLoading, setCryptoLoading] = useState(true);
-  const [cryptoError, setCryptoError] = useState(null);
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
-
-  // Fetch WeatherAPI.com current weather and air quality, require geolocation
-  useEffect(() => {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      try {
-        const { latitude, longitude } = position.coords;
-        const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=${latitude},${longitude}&aqi=yes`);
-        if (!res.ok) throw new Error('Weather fetch failed');
-        const data = await res.json();
-        setWeather(data);
-        setShowWeather(true);
-        setTimeout(() => setShowWeather(false), 8000);
-      } catch (err) {
-        setShowWeather(false);
-      }
-    });
-  }, []);
-
-  // Fetch crypto data from CoinGecko
-  useEffect(() => {
-    const fetchCrypto = async () => {
-      setCryptoLoading(true);
-      try {
-        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
-        if (!res.ok) throw new Error('Crypto fetch failed');
-        const data = await res.json();
-        setCryptoData(data);
-      } catch (err) {
-        setCryptoError('Failed to load crypto data');
-      } finally {
-        setCryptoLoading(false);
-      }
-    };
-    fetchCrypto();
-  }, []);
 
   const handleLogout = () => {
     logout();
-    // navigate('/login');
   };
 
-  const handleSidebarToggle = () => setSidebarExpanded((prev) => !prev);
-
   return (
-    <div className="dashboard-root">
-      <Sidebar onLogout={handleLogout} expanded={sidebarExpanded} onToggle={handleSidebarToggle} />
-      <div className="dashboard-mainarea">
+    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <Sidebar onLogout={handleLogout} />
+      <div className="flex flex-col">
         <TopNav user={user} />
-        <div className="dashboard-content-area">
-          <div className="dashboard-header-row">
-            <KpiCards />
-            <WeatherWidget weather={weather} />
-            <ThemeToggleButton />
+        <main className="flex-1 overflow-y-auto bg-slate-100/50 p-4 dark:bg-slate-900/50 sm:p-6">
+          <KpiCards />
+          <div className="mt-6">
+            <DashboardCharts />
           </div>
-          <NotificationBar notifications={[]} />
-          <DashboardCharts />
-          <DashboardTable />
-        </div>
+          <div className="mt-6">
+            <DashboardTable />
+          </div>
+        </main>
       </div>
     </div>
   );
