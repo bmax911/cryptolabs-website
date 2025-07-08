@@ -27,11 +27,22 @@ const Sidebar = ({ onLogout, open, setOpen }) => (
     />
     {/* Sidebar */}
     <aside
-      className={`fixed z-50 top-0 left-0 h-full w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-out
+      className={`fixed z-50 top-0 left-0 h-full w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 shadow-xl
+        transition-transform duration-500 ease-out will-change-transform
         ${open ? 'translate-x-0' : '-translate-x-full'}
         md:static md:translate-x-0 md:w-[220px] lg:w-[280px] md:block`}
+      style={{ boxShadow: open ? '0 8px 32px 0 rgba(31, 38, 135, 0.37)' : 'none' }}
     >
       <div className="flex h-16 items-center border-b px-6">
+        <button
+          className="md:hidden mr-4 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => setOpen(false)}
+          aria-label="Close sidebar"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-6 w-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
         <Link to="/" aria-label="Home" onClick={() => setOpen(false)}>
           <Logo />
         </Link>
