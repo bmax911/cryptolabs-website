@@ -1,0 +1,38 @@
+const fetch = require('node-fetch');
+
+exports.handler = async function(event) {
+  const { endpoint, ...params } = event.queryStringParameters;
+  const FRED_API_KEY = process.env.VITE_STLOUIS_FED_API;
+  const FRED_BASE_URL = 'https://api.stlouisfed.org/fred';
+
+  if (!endpoint) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Missing endpoint parameter' }),
+    };
+  }
+
+  // Build FRED API URL
+  const url = new URL(`${FRED_BASE_URL}/${endpoint}`);
+  url.searchParams.set('api_key', FRED_API_KEY);
+  url.searchParams.set('file_type', 'json');
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+
+  try {
+    const res = await fetch(url.toString());
+    if (!res.ok) {
+      return { statusCode: res.status, body: JSON.stringify({ error: 'FRED API error' }) };
+    }
+    const data = await res.json();
+    return {
+      statusCode: 200,
+      body: JSON.stringify(data),
+      headers: { 'Access-Control-Allow-Origin': '*' }
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Server error', details: err.message }),
+    };
+  }
+};

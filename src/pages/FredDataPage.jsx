@@ -5,9 +5,8 @@ const FRED_BASE_URL = 'https://api.stlouisfed.org/fred';
 
 // Helper to fetch from FRED API
 async function fetchFred(endpoint, params = {}) {
-  const url = new URL(`${FRED_BASE_URL}/${endpoint}`);
-  url.searchParams.set('api_key', FRED_API_KEY);
-  url.searchParams.set('file_type', 'json');
+  const url = new URL('/.netlify/functions/get-fred', window.location.origin);
+  url.searchParams.set('endpoint', endpoint);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
   const res = await fetch(url);
   if (!res.ok) throw new Error('FRED API error');
