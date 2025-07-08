@@ -25,13 +25,21 @@ exports.handler = async function(event) {
 
   try {
     const res = await fetch(url.toString());
-    if (!res.ok) {
-      return { statusCode: res.status, body: JSON.stringify({ error: 'FRED API error' }) };
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (jsonErr) {
+      // Log the raw response for debugging
+      console.error('FRED API non-JSON response:', text);
+      return {
+        statusCode: 502,
+        body: JSON.stringify({ error: 'FRED API did not return JSON', details: text.slice(0, 200) }),
+        headers: { 'Access-Control-Allow-Origin': '*' }
+      };
     }
-    const data = await res.json();
 
     // Patch for FRED API: always return arrays for releases and series
-    // (for endpoints: releases, release/series, etc.)
     if (endpoint === 'releases' && !Array.isArray(data.releases)) {
       data.releases = [];
     }
@@ -48,6 +56,7 @@ exports.handler = async function(event) {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Server error', details: err.message }),
+      headers: { 'Access-Control-Allow-Origin': '*' }
     };
   }
 };
