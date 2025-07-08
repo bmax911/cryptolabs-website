@@ -47,22 +47,6 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
       >
         <div className="flex h-16 items-center border-b px-2 md:px-4 lg:px-6 justify-between">
           <div className="flex items-center gap-2">
-            {/* Collapse/Expand button (desktop) */}
-            <button
-              className="hidden md:inline-flex p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onClick={() => setCollapsed((c) => !c)}
-              aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              {collapsed ? (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-              )}
-            </button>
             {/* Logo moved to TopNav */}
           </div>
           {/* Close button (mobile) */}
@@ -74,6 +58,24 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-6 w-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
+          </button>
+        </div>
+        {/* Collapse/Expand button (desktop) moved below header */}
+        <div className="hidden md:flex justify-end px-2 md:px-4 lg:px-6 py-2 border-b border-slate-200 dark:border-slate-800">
+          <button
+            className="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={() => setCollapsed((c) => !c)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {collapsed ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            )}
           </button>
         </div>
         <div className="flex-1 h-[calc(100vh-4rem)] overflow-y-auto p-2 md:p-4">
