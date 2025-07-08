@@ -19,6 +19,7 @@ import NewsRedirect from './components/NewsRedirect';
 import ProtectedRoute from './components/ProtectedRoute';
 import CashbackProgram from './components/CashbackProgram';
 import ProfilePage from './pages/ProfilePage';
+import FredDataPage from './pages/FredDataPage';
 
 // Import Components
 import Header from './components/Header';
@@ -63,6 +64,7 @@ function AppContent() {
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/news" element={<NewsRedirect />} />
+          <Route path="/fred" element={<FredDataPage />} />
           <Route path="*" element={
             <div className='container mx-auto text-center py-20'>
               <h1 className='text-3xl font-bold mb-4'>404 - Page Not Found</h1>

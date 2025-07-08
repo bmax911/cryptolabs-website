@@ -34,7 +34,7 @@ const Footer = () => {
               <ul className="mt-4 space-y-2">
                 <FooterLink to="/about">About</FooterLink>
                 <FooterLink to="/pricing">Pricing</FooterLink>
-                <FooterLink to="/overview">Overview</FooterLink>
+                <FooterLink to="/fred">FRED Data</FooterLink>
                 <FooterLink to="/dashboard">Dashboard</FooterLink>
               </ul>
             </div>
