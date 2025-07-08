@@ -3,6 +3,8 @@ import React from 'react';
 import ThemeToggleButton from './ThemeToggleButton';
 import { FaUserCircle, FaBars } from 'react-icons/fa';
 
+import Logo from './Logo';
+
 const TopNav = ({ user, onMenuClick }) => (
   <header className="flex h-16 items-center gap-4 border-b bg-white px-4 dark:bg-slate-950 md:px-6">
     {/* Hamburger for mobile */}
@@ -13,6 +15,10 @@ const TopNav = ({ user, onMenuClick }) => (
     >
       <FaBars className="h-6 w-6" />
     </button>
+    {/* Logo on the left */}
+    <div className="flex items-center">
+      <Logo />
+    </div>
     <div className="w-full flex-1">
       {/* Search bar can go here */}
     </div>

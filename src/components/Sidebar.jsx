@@ -63,9 +63,7 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
                 </svg>
               )}
             </button>
-            <Link to="/" aria-label="Home" onClick={() => setOpen(false)}>
-              {!collapsed && <Logo />}
-            </Link>
+            {/* Logo moved to TopNav */}
           </div>
           {/* Close button (mobile) */}
           <button
