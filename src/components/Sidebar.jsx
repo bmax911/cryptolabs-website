@@ -39,8 +39,8 @@ const Sidebar = ({ onLogout, open, setOpen }) => {
       />
       {/* Sidebar */}
       <aside
-        className={`fixed z-50 top-0 left-0 h-full bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 shadow-xl
-          transition-all duration-500 ease-out will-change-transform
+        className={`fixed z-40 top-16 left-0 h-[calc(100vh-4rem)] bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 shadow-2xl
+          transition-transform duration-500 ease-in-out will-change-transform
           ${sidebarWidth} ${sidebarTranslate}
           md:static md:translate-x-0 md:block`}
         style={{ boxShadow: open ? '0 8px 32px 0 rgba(31, 38, 135, 0.37)' : 'none' }}
