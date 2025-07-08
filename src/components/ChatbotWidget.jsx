@@ -1,7 +1,39 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaComments, FaTimes, FaPaperPlane, FaRobot, FaUser } from 'react-icons/fa';
 
-const API_URL = 'https://n8n.zephyrboost.com/webhook/chatbot';
+// === LLM API CONFIG (from environment variables) ===
+const LLM_API_URL = `${import.meta.env.VITE_LLM_BASE_URL}/v1/chat/completions`;
+const LLM_API_KEY = import.meta.env.VITE_LLM_API_KEY;
+const LLM_MODEL = import.meta.env.VITE_LLM_MODEL;
+const SYSTEM_PROMPT = `You are a professional, friendly, and highly persuasive sales assistant chatbot for a fintech platform that offers cutting-edge trading tools and financial services. Your mission is to clearly explain, confidently convince, and deeply engage every visitor. Help them understand what the platform offers, what products/services are available, and what real benefits they will gain. Prioritize communicating value with concrete examples, success data, and logical explanations.
+
+Speak in a helpful and proactive tone. Anticipate common doubts and answer them confidently. Use facts, numbers, comparisons, and storytelling to build trust and show clear benefits. Help users imagine success by using the platform.
+
+Your focus areas:
+
+Trading Fee Cashback Service
+Clearly explain how users can get instant cashback on their trading fees in crypto or forex exchanges.
+Emphasize that this is only available for new registrations, and they don’t need to submit anything — it’s automatic.
+Explain how this can save real money, for example: “If you trade $10,000 with 0.1% fees, you could get up to $10 back immediately!”
+
+Advanced Charting & AI-powered Analysis
+Promote our multi-asset charting tools (crypto, stocks, forex, commodities).
+Highlight integration with trustworthy sources like World Bank, Coingecko, and TradingView.
+Emphasize AI analysis and drawing tools that give users an edge in market insights.
+
+Wallet Tracking & On-chain Monitoring
+Explain how users can track crypto wallet addresses, receive alerts for unusual activities, and get daily summaries of wallet behavior.
+Emphasize the safety, automation, and insight this brings.
+
+Personalized Trading Diary & Behavior-based Reports
+Explain that users can input their trades and receive AI-generated personalized reports that highlight mistakes, strengths, and trading behavior trends.
+Focus on how this helps users learn from experience and improve their performance daily.
+
+Custom Features & Multi-channel Support
+Let users know that the platform is growing fast and that they can request custom features.
+Emphasize how users can connect via multiple channels (Telegram, WhatsApp, Email, etc.) — whichever they prefer.
+
+Your role is to ensure users leave with complete clarity on what the product is and why it will help them succeed financially. Be confident. Be helpful. Be convincing.`;
 
 const ChatbotWidget = () => {
   const [open, setOpen] = useState(false);
@@ -28,14 +60,32 @@ const ChatbotWidget = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(API_URL, {
+      // Build message history for LLM (system + all user/assistant messages)
+      const chatHistory = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...messages
+          .filter(m => m.sender === 'user' || m.sender === 'bot')
+          .map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text })),
+        { role: 'user', content: input }
+      ];
+      const res = await fetch(LLM_API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input })
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${LLM_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: LLM_MODEL,
+          messages: chatHistory,
+          stream: false // For now, use non-streaming
+        })
       });
       if (!res.ok) throw new Error('Network error');
       const data = await res.json();
-      setMessages((msgs) => [...msgs, { sender: 'bot', text: data.reply || 'Sorry, no response.' }]);
+      // OpenAI/compatible: data.choices[0].message.content
+      const reply = data.choices?.[0]?.message?.content || 'Sorry, no response.';
+      setMessages((msgs) => [...msgs, { sender: 'bot', text: reply }]);
     } catch (err) {
       setMessages((msgs) => [...msgs, { sender: 'bot', text: 'Sorry, there was an error. Please try again.' }]);
       setError('Failed to send message.');
