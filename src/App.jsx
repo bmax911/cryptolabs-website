@@ -18,6 +18,7 @@ import Dashboard from './components/Dashboard';
 import NewsRedirect from './components/NewsRedirect';
 import ProtectedRoute from './components/ProtectedRoute';
 import CashbackProgram from './components/CashbackProgram';
+import ProfilePage from './pages/ProfilePage';
 
 // Import Components
 import Header from './components/Header';
@@ -60,6 +61,7 @@ function AppContent() {
           <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/cashback-program" element={<CashbackProgram />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/news" element={<NewsRedirect />} />
           <Route path="*" element={
             <div className='container mx-auto text-center py-20'>
