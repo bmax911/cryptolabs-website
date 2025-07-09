@@ -19,6 +19,7 @@ import NewsRedirect from './components/NewsRedirect';
 import ProtectedRoute from './components/ProtectedRoute';
 import CashbackProgram from './components/CashbackProgram';
 import ProfilePage from './pages/ProfilePage';
+import EconomicDashboardPage from './pages/EconomicDashboardPage';
 
 // Import Components
 import Header from './components/Header';
@@ -58,6 +59,8 @@ function AppContent() {
           <Route path="/terms-of-use" element={<TermsOfUsePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+          {/* Economic Dashboard route */}
+          <Route path="/economic-indicators" element={<EconomicDashboardPage />} />
           <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/cashback-program" element={<CashbackProgram />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
